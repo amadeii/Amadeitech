@@ -200,7 +200,6 @@ function GlobeSection() {
           <CinematicText
             lines={["Design que aproxima."]}
             direction="balance"
-            delay={450}
           />
         </h2>
         <p>

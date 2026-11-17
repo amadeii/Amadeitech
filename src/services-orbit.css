@@ -80,6 +80,7 @@
   inset: 0;
 }
 .orbit-service {
+  text-align: left;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -104,6 +105,9 @@
 .orbit-service::before {
   content: "";
   position: absolute;
+  /* Opacity flattens 3D descendants during entry; keep the back plate behind
+     the card contents even while translateZ cannot establish that ordering. */
+  z-index: -1;
   inset: -1px;
   border-radius: inherit;
   background: linear-gradient(125deg, #5374a2, #122543 55%, #070f20);
@@ -135,14 +139,17 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.orbit-service h3 {
+.orbit-service-title {
+  display: block;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 25px;
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: -0.015em;
   margin-bottom: 13px;
 }
-.orbit-service p {
+.orbit-service-copy {
+  display: block;
   color: #d4def0;
   font-size: 15px;
   line-height: 1.45;
@@ -237,11 +244,11 @@
     grid-row: 1 / 4;
     margin: 0;
   }
-  .orbit-service h3 {
+  .orbit-service-title {
     font-size: 25px;
     margin-bottom: 8px;
   }
-  .orbit-service p {
+  .orbit-service-copy {
     font-size: 15px;
   }
   .orbit-detail {
@@ -279,7 +286,7 @@
     padding: 18px 16px;
     column-gap: 13px;
   }
-  .orbit-service h3 {
+  .orbit-service-title {
     font-size: 24px;
   }
   .orbit-detail {
@@ -314,7 +321,7 @@
     padding: 18px;
     min-height: 0;
   }
-  :root[data-motion="reduce"] .orbit-service h3 {
+  :root[data-motion="reduce"] .orbit-service-title {
     font-size: 23px;
   }
   :root[data-motion="reduce"] .orbit-detail {
@@ -323,7 +330,6 @@
 }
 /* Mobile keeps the same world-space orbit. Desktop and tablet rules above stay
    intact; only reduced motion deliberately replaces movement with a readable list. */
-.orbit-mobile-action,
 .orbital-section .orbital-mobile-cta {
   display: none;
 }
@@ -387,12 +393,12 @@
     height: 23px;
     margin-bottom: 12px;
   }
-  .orbit-service h3 {
+  .orbit-service-title {
     font-size: 21px;
     line-height: 1.08;
     margin-bottom: 10px;
   }
-  .orbit-service p {
+  .orbit-service-copy {
     font-size: 14px;
     line-height: 1.4;
   }
@@ -401,15 +407,6 @@
   }
   .orbit-service[data-selected="true"] {
     border-color: #d4e6ff;
-  }
-  .orbit-service[data-selected="true"] .orbit-mobile-action {
-    display: block;
-    font-size: 12px;
-    line-height: 1.3;
-    margin-top: 14px;
-    color: #d4e6ff;
-    text-decoration: underline;
-    text-underline-offset: 3px;
   }
   :root[data-motion="reduce"] .orbital-section .services-scene {
     height: auto;
@@ -451,16 +448,13 @@
     grid-row: 1;
     margin: 0;
   }
-  .orbit-service h3 {
+  .orbit-service-title {
     font-size: 20px;
     margin: 0;
   }
-  .orbit-service p {
+  .orbit-service-copy {
     grid-column: 1 / -1;
     margin-top: 12px;
-  }
-  .orbit-mobile-action {
-    grid-column: 1 / -1;
   }
   :root[data-motion="reduce"] .orbit-service {
     grid-template-columns: 23px minmax(0, 1fr);
