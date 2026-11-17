@@ -16,23 +16,6 @@ const HeroScene = lazy(() => import("./HeroScene"));
 const NetworkLines = lazy(() => import("./NetworkField"));
 const Globe = lazy(() => import("./Globe"));
 
-function Arrow({ diagonal = false }: { diagonal?: boolean }) {
-  return (
-    <svg
-      aria-hidden="true"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d={diagonal ? "M5 19 19 5M5 5h14v14" : "M4 12h16m-7-7 7 7-7 7"}
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-}
 function useMotion() {
   useEffect(() => {
     const reduced = motionPreference();
@@ -167,7 +150,7 @@ function ProjectFeature({
           target="_blank"
           rel="noopener noreferrer"
         >
-          Visitar site <Arrow diagonal />
+          Visitar site
         </a>
         <TechnologyMarquee
           items={project.technologies}
@@ -179,7 +162,7 @@ function ProjectFeature({
             className="project-next"
             href={`#project-${projects[index + 1].id}`}
           >
-            Próximo: {projects[index + 1].name} <Arrow />
+            Próximo: {projects[index + 1].name}
           </a>
         )}
       </div>
@@ -293,7 +276,7 @@ function FounderSection() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Conheça meu GitHub <Arrow diagonal />
+              Conheça meu GitHub
             </a>
           )}
         </div>
@@ -359,7 +342,7 @@ function Contact() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Prefere conversar direto? <Arrow diagonal />
+          Prefere conversar direto?
         </a>
       </div>
       <form
@@ -435,7 +418,7 @@ function Contact() {
           concluir.
         </p>
         <button className="button button-dark" type="submit">
-          Enviar pelo WhatsApp <Arrow diagonal />
+          Enviar pelo WhatsApp
         </button>
         <div className="form-feedback" role="status" aria-live="polite">
           {status}
@@ -446,7 +429,7 @@ function Contact() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Abrir WhatsApp novamente <Arrow diagonal />
+              Abrir WhatsApp novamente
             </a>
           )}
         </div>
@@ -759,7 +742,7 @@ function EnterpriseSystems() {
                 </span>
                 <span>ORION Empresarial</span>
                 <span className="orion-capture-expand">
-                  Ampliar <Arrow diagonal />
+                  Ampliar
                 </span>
               </span>
               <span className="orion-capture-crop">
@@ -933,7 +916,7 @@ export default function App() {
             className="nav-contact"
             onClick={() => setMenu(false)}
           >
-            Vamos conversar <Arrow diagonal />
+            Vamos conversar
           </a>
         </nav>
       </header>
@@ -947,10 +930,10 @@ export default function App() {
             </p>
             <div className="hero-actions">
               <a href="#projetos" className="button button-blue">
-                Explore os sites <Arrow diagonal />
+                Explore os sites
               </a>
               <a href="#contato" className="text-link">
-                Vamos criar juntos <Arrow diagonal />
+                Vamos criar juntos
               </a>
             </div>
           </div>
@@ -979,9 +962,6 @@ export default function App() {
               <br />
               Experiências feitas sob medida.
             </span>
-            <a href="#experiencia">
-              Continue explorando <span className="scroll-arrow">↓</span>
-            </a>
           </div>
         </section>
         <section className="intro-section" id="sobre" data-reveal>
@@ -1025,7 +1005,7 @@ export default function App() {
           <nav className="project-index" aria-label="Explorar os quatro sites">
             {projects.map((project) => (
               <a key={project.id} href={`#project-${project.id}`}>
-                {project.name} <Arrow diagonal />
+                {project.name}
               </a>
             ))}
           </nav>
@@ -1054,14 +1034,14 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Instagram <Arrow diagonal />
+              Instagram
             </a>
             <a
               href={`https://wa.me/${studio.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              WhatsApp <Arrow diagonal />
+              WhatsApp
             </a>
           </div>
           <p className="footer-note">Design & desenvolvimento sob medida.</p>
@@ -1072,7 +1052,7 @@ export default function App() {
             Desenvolvido por AmadeiDev
           </span>
           <a href="#inicio" className="back-top">
-            Voltar ao início <Arrow diagonal />
+            Voltar ao início
           </a>
         </div>
       </footer>

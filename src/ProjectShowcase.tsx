@@ -246,7 +246,6 @@ export default function ProjectShowcase({ project }: { project: Project }) {
                 <i />
               </span>
               <span>{new URL(project.url).hostname}</span>
-              <span className="showcase-window-symbol">↗</span>
             </div>
             <div className="showcase-glass" aria-hidden="true" />
             <div
