@@ -1,0 +1,54 @@
+{
+  "source": "C:/Users/gabri/Desktop/Norium",
+  "route": "/produtos",
+  "capture": "public/projects/beaute-panel.png",
+  "scope": "Captura real do frontend administrativo existente vinculado à 29 Beauté. Renderização local do build original com fixtures vazias de API e sessão offline apenas neste navegador. Sem dados de clientes, métricas inventadas, backend, autenticação real ou alteração do projeto original.",
+  "confirmedInSource": [
+    "produtos",
+    "pedidos",
+    "estoque",
+    "clientes",
+    "cupons",
+    "marcas",
+    "relatorios"
+  ],
+  "operationalStatus": "Não verificado",
+  "requests": [
+    {
+      "path": "/produtos",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/index-BoyChipD.js",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/index-D6R-oO-u.css",
+      "method": "GET"
+    },
+    {
+      "path": "/css2",
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/favicon.svg",
+      "method": "GET"
+    },
+    {
+      "path": "/norium-logo.png.jpeg",
+      "method": "GET"
+    },
+    {
+      "path": "/api/products",
+      "method": "GET"
+    },
+    {
+      "path": "/api/brands",
+      "method": "GET"
+    }
+  ]
+}

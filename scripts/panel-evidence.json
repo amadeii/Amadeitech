@@ -1,0 +1,13 @@
+{
+  "source": "C:/Users/gabri/Downloads/Wandyfit/cp/pedidos.html",
+  "capture": "public/projects/wandyfitt-panel.png",
+  "scope": "Interface HTML e CSS originais renderizada localmente. Scripts removidos da captura; nenhuma conexão com backend, autenticação, consulta de dados ou ação em produção.",
+  "confirmedPanel": [
+    "dashboard.html",
+    "pedidos.html",
+    "cozinha.html",
+    "cardapio.html",
+    "financeiro.html"
+  ],
+  "operationalStatus": "Não verificado"
+}

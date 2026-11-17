@@ -1,0 +1,60 @@
+{
+  "scope": "Capturas das interfaces originais em navegador isolado. Wandy: HTML/CSS sem scripts; Norium: build original com APIs vazias e sessão offline. Nenhum dado de cliente, resultado comercial, consulta real ou ação em produção.",
+  "operationalStatus": "Backend e produção não homologados nesta rodada",
+  "evidence": [
+    {
+      "project": "wandyfitt",
+      "module": "pedidos",
+      "source": "C:/Users/gabri/Downloads/Wandyfit/cp/pedidos.html",
+      "image": "public/projects/wandyfitt-pedidos.png",
+      "heading": [
+        "Pedidos"
+      ]
+    },
+    {
+      "project": "wandyfitt",
+      "module": "cozinha",
+      "source": "C:/Users/gabri/Downloads/Wandyfit/cp/cozinha.html",
+      "image": "public/projects/wandyfitt-cozinha.png",
+      "heading": [
+        "Produção e cozinha"
+      ]
+    },
+    {
+      "project": "wandyfitt",
+      "module": "cardapio",
+      "source": "C:/Users/gabri/Downloads/Wandyfit/cp/cardapio.html",
+      "image": "public/projects/wandyfitt-cardapio.png",
+      "heading": [
+        "Cardápio"
+      ]
+    },
+    {
+      "project": "beaute",
+      "module": "produtos",
+      "source": "C:/Users/gabri/Desktop/Norium/src/pages/Products.tsx",
+      "image": "public/projects/beaute-produtos.png",
+      "heading": [
+        "Produtos"
+      ]
+    },
+    {
+      "project": "beaute",
+      "module": "pedidos",
+      "source": "C:/Users/gabri/Desktop/Norium/src/pages/Orders.tsx",
+      "image": "public/projects/beaute-pedidos.png",
+      "heading": [
+        "Pedidos"
+      ]
+    },
+    {
+      "project": "beaute",
+      "module": "estoque",
+      "source": "C:/Users/gabri/Desktop/Norium/src/pages/Inventory.tsx",
+      "image": "public/projects/beaute-estoque.png",
+      "heading": [
+        "Estoque"
+      ]
+    }
+  ]
+}

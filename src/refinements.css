@@ -1,0 +1,414 @@
+/* Scoped refinements: the approved Ares and Alanna compositions stay intact. */
+.project-chapter[data-project="wandyfitt"] .project-title {
+  grid-column: 8 / -1;
+  grid-row: 1;
+  align-self: end;
+  padding: 24px 0 0;
+}
+.project-chapter[data-project="wandyfitt"] .project-title h3 {
+  font-size: clamp(72px, 7.4vw, 136px);
+  line-height: 0.95;
+}
+.project-chapter[data-project="wandyfitt"] .project-visual {
+  grid-column: 1 / 8;
+  grid-row: 1 / 3;
+  height: clamp(590px, 47vw, 800px);
+  background: #283c30;
+  padding: 12px;
+}
+.project-chapter[data-project="wandyfitt"] .project-caption {
+  grid-column: 8 / -1;
+  grid-row: 2;
+  padding-top: 0;
+}
+.project-chapter[data-project="wandyfitt"] .project-image-link > img {
+  object-position: left top;
+}
+.project-chapter[data-project="beaute"] .project-title {
+  grid-column: 1 / 6;
+  grid-row: 1;
+  align-self: end;
+  text-align: left;
+  padding: 12px 0 0;
+}
+.project-chapter[data-project="beaute"] .project-title h3 {
+  font-size: clamp(94px, 10vw, 178px);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+.project-chapter[data-project="beaute"] .project-title h3 a {
+  gap: 22px;
+}
+.project-chapter[data-project="beaute"] .project-title h3 svg {
+  margin-top: 0.12em;
+}
+.project-chapter[data-project="beaute"] .project-visual {
+  grid-column: 6 / -1;
+  grid-row: 1 / 3;
+  height: clamp(640px, 51vw, 880px);
+  padding: 18px;
+  background: #292c30;
+}
+.project-chapter[data-project="beaute"] .project-caption {
+  grid-column: 1 / 6;
+  grid-row: 2;
+  display: flex;
+  padding: 0 7% 0 0;
+  gap: 22px;
+}
+.project-chapter[data-project="beaute"] .project-image-link > img {
+  object-position: left top;
+}
+.project-chapter .project-image-link.is-panel > img {
+  object-fit: contain;
+  object-position: center;
+}
+.project-chapter .project-frame-label {
+  background: #101a2a;
+}
+.project-chapter .project-view-switch {
+  padding: 6px;
+  gap: 6px;
+  background: #101a2a;
+}
+.project-chapter .project-view-switch button {
+  min-height: 44px;
+  flex: 1;
+  font-size: 13px;
+}
+.project-chapter .project-view-switch button[aria-pressed="true"] {
+  background: #e6edf5;
+  color: #111c2d;
+}
+.project-chapter .project-panel-close {
+  top: 12px;
+  right: 12px;
+}
+.project-chapter[data-project="beaute"] .project-panel-close {
+  top: 18px;
+  right: 18px;
+}
+.project-chapter .project-panel-note {
+  gap: 8px;
+}
+.project-chapter .project-panel-note > p {
+  max-width: 44ch;
+}
+.project-chapter .project-panel-note > button {
+  min-height: 44px;
+}
+.project-chapter .project-next {
+  margin-top: 0;
+}
+/* A person introduces the work, without shifting the company's focus. */
+.founder-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(48px, 8vw, 140px);
+  padding: clamp(80px, 8vw, 140px) var(--gutter);
+  background: #080e1c;
+}
+.founder-portrait {
+  width: 100%;
+  max-width: 460px;
+  justify-self: center;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #142e69;
+}
+.founder-portrait > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+}
+.founder-photo-slot {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(24px, 3vw, 48px);
+  color: #dce7ff;
+}
+.founder-photo-slot > span {
+  font:
+    400 clamp(72px, 7.5vw, 126px) / 0.87 "Barlow Condensed",
+    sans-serif;
+  letter-spacing: -0.03em;
+  margin-top: auto;
+}
+.founder-photo-slot > p {
+  font-size: 14px;
+  margin-top: 32px;
+}
+.founder-copy h2 {
+  font-size: clamp(46px, 5vw, 78px);
+  line-height: 1.02;
+  margin-bottom: 32px;
+}
+.founder-copy h3 {
+  font:
+    500 24px / 1.3 "Barlow",
+    sans-serif;
+  letter-spacing: -0.015em;
+  margin-bottom: 18px;
+}
+.founder-copy p {
+  max-width: 51ch;
+  font-size: 18px;
+  line-height: 1.65;
+  color: #c1cde3;
+}
+.founder-copy p + p {
+  margin-top: 16px;
+}
+.founder-specialties {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  color: #e0e9ff;
+  font-size: 16px;
+}
+.founder-github {
+  min-height: 44px;
+}
+/* An invitation at reading scale, with the form and copy in one composition. */
+.contact-refined {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(36px, 6vw, 100px);
+  padding-block: clamp(80px, 8vw, 130px);
+  align-items: start;
+  background: #0c1630;
+}
+.contact-refined .contact-intro {
+  display: block;
+  padding: 16px 0 0;
+}
+.contact-refined .contact-intro > h2 {
+  font-size: clamp(44px, 4.6vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin-bottom: 26px;
+}
+.contact-refined .contact-intro > p {
+  font-size: 19px;
+  line-height: 1.6;
+  max-width: 34ch;
+}
+.contact-refined .contact-intro > .text-link {
+  margin-top: 30px;
+  min-height: 44px;
+}
+.contact-refined .brief-form {
+  grid-column: auto;
+  grid-row: auto;
+  width: 100%;
+  max-width: none;
+  padding: clamp(24px, 3vw, 44px);
+  background: #111f3b;
+}
+.contact-refined .brief-form label {
+  margin-bottom: 22px;
+}
+.contact-refined .button-dark {
+  background: #315cff;
+  color: #fff;
+}
+.footer-bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px 24px;
+}
+.footer-note {
+  max-width: 24ch;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: right;
+}
+.footer-bottom .back-top {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 10px;
+  min-height: 44px;
+}
+.footer-bottom .back-top svg {
+  width: 18px;
+  height: 18px;
+}
+.developer-signature {
+  justify-self: center;
+  text-align: center;
+  font-size: 13px;
+  color: #aab9d4;
+}
+@media (max-width: 700px) {
+  .footer-top > .footer-note {
+    width: auto;
+    max-width: none;
+    font-size: 13px;
+    text-align: left;
+  }
+  .footer-bottom {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 16px;
+  }
+  .footer-bottom .developer-signature {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .footer-bottom .back-top {
+    grid-column: 2;
+    grid-row: 1;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .project-chapter[data-project="wandyfitt"] .project-title,
+  .project-chapter[data-project="wandyfitt"] .project-caption {
+    grid-column: 7 / -1;
+  }
+  .project-chapter[data-project="wandyfitt"] .project-visual {
+    grid-column: 1 / 7;
+    height: 660px;
+  }
+  .project-chapter[data-project="wandyfitt"] .project-title h3 {
+    font-size: clamp(60px, 7.4vw, 82px);
+  }
+  .project-chapter[data-project="beaute"] .project-title,
+  .project-chapter[data-project="beaute"] .project-caption {
+    grid-column: 1 / 7;
+  }
+  .project-chapter[data-project="beaute"] .project-visual {
+    grid-column: 7 / -1;
+    height: 720px;
+  }
+  .founder-section {
+    gap: 40px;
+  }
+  .founder-specialties {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .contact-refined {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 32px;
+  }
+  .contact-refined .contact-intro > h2 {
+    font-size: clamp(38px, 4.8vw, 52px);
+  }
+}
+@media (max-width: 700px) {
+  .project-chapter[data-project="wandyfitt"] .project-title,
+  .project-chapter[data-project="beaute"] .project-title {
+    align-self: flex-start;
+    padding: 0;
+  }
+  .project-chapter[data-project="wandyfitt"] .project-title h3 {
+    font-size: clamp(60px, 15vw, 96px);
+  }
+  .project-chapter[data-project="beaute"] .project-title h3 {
+    font-size: clamp(68px, 18vw, 112px);
+    line-height: 0.93;
+  }
+  .project-chapter[data-project="wandyfitt"] .project-visual {
+    height: clamp(390px, 116vw, 660px);
+    width: 100%;
+    padding: 8px;
+  }
+  .project-chapter[data-project="beaute"] .project-visual {
+    height: clamp(370px, 108vw, 620px);
+    width: 92%;
+    align-self: flex-end;
+    padding: 10px;
+  }
+  .project-chapter[data-project="wandyfitt"] .project-caption,
+  .project-chapter[data-project="beaute"] .project-caption {
+    padding: 0;
+    gap: 18px;
+  }
+  .project-chapter .project-frame-label {
+    padding-inline: 10px;
+  }
+  .project-chapter .project-panel-close {
+    top: 8px;
+    right: 8px;
+  }
+  .project-chapter[data-project="beaute"] .project-panel-close {
+    top: 10px;
+    right: 10px;
+  }
+  .founder-section {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding-block: 80px;
+  }
+  .founder-portrait {
+    width: 78%;
+    max-width: 360px;
+    justify-self: start;
+    aspect-ratio: 1;
+  }
+  .founder-photo-slot {
+    padding: 24px;
+  }
+  .founder-photo-slot > span {
+    font-size: clamp(66px, 20vw, 108px);
+  }
+  .founder-copy h2 {
+    font-size: clamp(43px, 11vw, 66px);
+    margin-bottom: 26px;
+  }
+  .founder-copy p {
+    font-size: 17px;
+  }
+  .founder-specialties {
+    font-size: 15px;
+    gap: 12px;
+  }
+  .contact-refined {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-block: 72px;
+  }
+  .contact-refined .contact-intro {
+    padding: 0;
+  }
+  .contact-refined .contact-intro > h2 {
+    font-size: clamp(38px, 10.6vw, 62px);
+    margin-bottom: 22px;
+  }
+  .contact-refined .contact-intro > p {
+    font-size: 18px;
+  }
+  .contact-refined .contact-intro > .text-link {
+    margin: 20px 0 0;
+  }
+  .contact-refined .brief-form {
+    padding: 24px 18px;
+  }
+  .contact-refined .brief-form > .button {
+    gap: 12px;
+    padding-inline: 14px;
+    font-size: 15px;
+  }
+  .contact-refined .field-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+:root[data-motion="reduce"] .project-chapter .project-title {
+  transform: none !important;
+}
+:root[data-motion="reduce"] .project-chapter .project-image-link {
+  transform: none !important;
+  clip-path: none !important;
+}

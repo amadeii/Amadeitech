@@ -1,0 +1,95 @@
+{
+  "checkedAt": "2026-11-04T02:40:48.443Z",
+  "published": [
+    {
+      "id": "beaute",
+      "url": "https://29beaute.com.br/assets/index-B8iIobyq.js",
+      "sha256": "6c48f869d8cd4c66bbff0f635002469ea2ff3e457403fbde90aa1f356612502c",
+      "reactLicense": false,
+      "reactVersion": [],
+      "javascript": true
+    },
+    {
+      "id": "ares",
+      "url": "https://aresstudiopilates.com.br/assets/index-BqcyCw8X.js",
+      "sha256": "3533b6ecdaded368387a71eb8a529dc2b13a6c9b0373dd45d6ada653cfe3c10a",
+      "reactLicense": false,
+      "reactVersion": [],
+      "javascript": true
+    },
+    {
+      "id": "alanna",
+      "url": "https://alannafotopet.com.br/assets/index-YIC1dfn9.js",
+      "sha256": "967f7e248c97f68acc78b86a2005e6712ca1ab747c72b15efd8e3327f085da4d",
+      "reactLicense": true,
+      "reactVersion": [
+        "19.3.1",
+        "19.3.1"
+      ],
+      "javascript": true
+    },
+    {
+      "id": "wandyfitt",
+      "url": "https://wandyfitt.com.br/assets/js/script.js?v=hero-cards",
+      "sha256": "d29353ed4cded07b572406a8253b2e78f319a6b790b31a2914efdbf88dafcf66",
+      "reactLicense": false,
+      "reactVersion": [],
+      "javascript": true
+    }
+  ],
+  "localAlanna": {
+    "path": "C:/Users/gabri/Desktop/AlannaFotoPet/package.json",
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Vite"
+    ],
+    "scope": "Código-fonte local; não comprova versão exata publicada"
+  },
+  "scope": "Stacks confirmadas nos caminhos fornecidos pelo usuário; bibliotecas observadas também nos bundles públicos quando disponíveis. Integração Supabase no código não comprova estado operacional do serviço.",
+  "localSources": [
+    {
+      "project": "beaute",
+      "source": "C:/Users/gabri/Desktop/Norium/sites/29beaute/package.json",
+      "code": "src/App.tsx",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "CSS"
+      ]
+    },
+    {
+      "project": "wandyfitt",
+      "source": "C:/Users/gabri/Downloads/Wandyfit/index.html",
+      "code": "assets/js/app-data.js createClient",
+      "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Supabase"
+      ]
+    },
+    {
+      "project": "alanna",
+      "source": "C:/Users/gabri/Desktop/AlannaFotoPet/package.json",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "CSS"
+      ]
+    },
+    {
+      "project": "ares",
+      "source": "C:/Users/gabri/Downloads/AreStudio v.1/package.json",
+      "code": "src/style.css @import tailwindcss + src/main.js",
+      "technologies": [
+        "HTML",
+        "JavaScript",
+        "Tailwind CSS",
+        "Vite"
+      ]
+    }
+  ]
+}

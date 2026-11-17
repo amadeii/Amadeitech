@@ -1,0 +1,149 @@
+/* Only 29 Beauté and ORION change composition in this refinement. */
+@media (min-width: 701px) {
+  .project-chapter[data-project="beaute"] .project-title,
+  .project-chapter[data-project="beaute"] .project-caption {
+    grid-column: 8 / -1;
+  }
+  .project-chapter[data-project="beaute"] .project-visual {
+    grid-column: 1 / 8;
+  }
+  .project-chapter[data-project="beaute"] .project-caption {
+    padding-inline: 0;
+  }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .project-chapter[data-project="beaute"] .project-title,
+  .project-chapter[data-project="beaute"] .project-caption {
+    grid-column: 7 / -1;
+  }
+  .project-chapter[data-project="beaute"] .project-visual {
+    grid-column: 1 / 7;
+  }
+}
+#sistemas .system-feature {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: start;
+  row-gap: 32px;
+}
+#sistemas .system-visual {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: start;
+  position: sticky;
+  top: 72px;
+}
+#sistemas .system-copy {
+  grid-column: 2;
+  grid-row: 1;
+  max-width: none;
+}
+#sistemas .system-capabilities {
+  grid-column: 2;
+  grid-row: 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 24px;
+}
+#sistemas .system-title {
+  position: relative;
+  isolation: isolate;
+}
+#sistemas .system-title > h3,
+#sistemas .system-title > .system-status {
+  position: relative;
+  z-index: 1;
+}
+.orion-orbit {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  left: -40px;
+  top: -38px;
+  width: min(340px, calc(100% + 20px));
+  height: 180px;
+  opacity: 0.65;
+  background: radial-gradient(ellipse, #2352a91c, transparent 68%);
+}
+.orion-orbit-plane {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  transform: translateY(-50%) rotate(-14deg) scaleY(0.42);
+}
+.orion-orbit-spin {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #739af04d;
+  border-top-color: #93b6ffb3;
+  border-left-color: transparent;
+  border-radius: 50%;
+  animation: orion-field-orbit 32s linear infinite;
+  animation-play-state: paused;
+}
+.orion-orbit-spin::before {
+  content: "";
+  position: absolute;
+  top: 14%;
+  right: 14%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9fc6ff;
+}
+.orion-orbit-plane-secondary {
+  left: 7%;
+  width: 86%;
+  transform: translateY(-50%) rotate(17deg) scaleY(0.36);
+  opacity: 0.55;
+}
+.orion-orbit-plane-secondary .orion-orbit-spin {
+  animation-duration: 46s;
+  animation-direction: reverse;
+}
+.orion-orbit[data-running="true"] .orion-orbit-spin {
+  animation-play-state: running;
+}
+@keyframes orion-field-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+:root[data-motion="reduce"] .orion-orbit {
+  opacity: 0.35;
+}
+:root[data-motion="reduce"] .orion-orbit-spin {
+  animation: none;
+}
+@media (max-width: 1000px) {
+  #sistemas .system-feature {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #sistemas .system-visual {
+    grid-column: 1;
+    grid-row: 1;
+    position: static;
+  }
+  #sistemas .system-copy {
+    grid-column: 1;
+    grid-row: 2;
+    max-width: 720px;
+  }
+  #sistemas .system-capabilities {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
+@media (max-width: 480px) {
+  #sistemas .system-capabilities {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .orion-orbit {
+    left: -18px;
+    top: -34px;
+    width: 260px;
+    height: 156px;
+  }
+}

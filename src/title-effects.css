@@ -1,0 +1,69 @@
+/* Original Originkit cube faces. Preserve depth through every inline ancestor. */
+.stagger-flip {
+  display: flex;
+  flex-wrap: wrap;
+  perspective: 800px;
+  perspective-origin: center;
+  color: #9fbaff;
+}
+.flip-word {
+  display: inline-flex;
+  transform-style: preserve-3d;
+}
+.text-3d-flip-char {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+}
+.flip-front,
+.flip-second {
+  display: block;
+  height: 1lh;
+  backface-visibility: hidden;
+}
+.flip-front {
+  position: relative;
+  transform: translateZ(0.5lh);
+}
+.flip-second {
+  position: absolute;
+  inset: 0 auto auto 0;
+  transform: rotateX(-90deg) translateZ(0.5lh);
+}
+.flip-space {
+  white-space: pre;
+}
+.hero-content .vaporize-heading {
+  position: relative;
+  color: #f1f5ff;
+  isolation: isolate;
+}
+.hero-content .vaporize-heading span {
+  display: block;
+  overflow: visible;
+  animation: none;
+}
+.vaporize-canvas {
+  position: absolute;
+  pointer-events: none;
+  display: none;
+}
+:root[data-motion="full"]
+  .vaporize-heading[data-vaporize-ready="true"]
+  .vaporize-source {
+  color: transparent;
+}
+:root[data-motion="full"]
+  .vaporize-heading[data-vaporize-ready="true"]
+  .vaporize-canvas {
+  display: block;
+}
+@media (max-width: 650px) {
+  .hero {
+    height: 900px;
+    min-height: 900px;
+  }
+  .hero-art {
+    top: 400px;
+  }
+}

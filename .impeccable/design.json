@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T02:52:37.913Z",
+  "title": "Design System: AmadeiTech",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Preto espacial"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Marinho profundo"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Branco frio"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Azul acinzentado"
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Cobalto elétrico"
+      },
+      "blue-hover": {
+        "role": "primary",
+        "displayName": "Cobalto de interação"
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Azul de foco"
+      },
+      "contact-bg": {
+        "role": "neutral",
+        "displayName": "Marinho de contato"
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Borda de campo"
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Branco"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Hero",
+        "purpose": "Mensagem principal desktop; mobile tem escala própria no CSS."
+      },
+      "headline": {
+        "displayName": "Seções",
+        "purpose": "Títulos principais de conteúdo."
+      },
+      "title": {
+        "displayName": "Projetos",
+        "purpose": "Títulos de projetos e serviços."
+      },
+      "body": {
+        "displayName": "Corpo",
+        "purpose": "Texto de apoio; variações contextuais entre 16px e 20px."
+      },
+      "label": {
+        "displayName": "Controles",
+        "purpose": "Botões e ações."
+      }
+    },
+    "shadows": [
+      {
+        "name": "desktop-frame",
+        "value": "0 30px 60px #0005",
+        "purpose": "Profundidade do frame desktop."
+      },
+      {
+        "name": "mobile-screen",
+        "value": "0 24px 45px #0008",
+        "purpose": "Captura mobile complementar."
+      },
+      {
+        "name": "contact-orbit",
+        "value": "0 15px 70px #1d54db20",
+        "purpose": "Luz difusa da órbita do contato."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Entradas e feedback."
+      },
+      {
+        "name": "control",
+        "value": "220ms",
+        "purpose": "Botões e links."
+      },
+      {
+        "name": "project-reveal",
+        "value": "850ms",
+        "purpose": "Escala e máscara de entrada."
+      },
+      {
+        "name": "service-reveal",
+        "value": "600ms",
+        "purpose": "Entrada lateral."
+      },
+      {
+        "name": "chapter-reveal",
+        "value": "500ms",
+        "purpose": "Máscara breve desde opacidade .72; ativo permanece em 1."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "360px"
+      },
+      {
+        "name": "mobile",
+        "value": "650px"
+      },
+      {
+        "name": "tablet-composition",
+        "value": "900px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "wide",
+        "value": "1800px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "CTA cobalto",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal com seta e foco de teclado.",
+      "html": "<button class=\"ds-button\">Vamos conversar <svg aria-hidden=\"true\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M4 12h16m-7-7 7 7-7 7\" stroke=\"currentColor\" stroke-width=\"1.5\"/></svg></button>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:space-between;gap:30px;min-height:58px;padding:17px 24px;border:0;border-radius:3px;background:var(--blue,#315cff);color:white;font:500 16px Barlow,sans-serif;cursor:pointer;transition:transform 220ms cubic-bezier(.23,1,.32,1),background 220ms}.ds-button:focus-visible{outline:3px solid #8fb1ff;outline-offset:6px}.ds-button:active{transform:scale(.97)}@media(hover:hover) and (pointer:fine){.ds-button:hover{background:#477bff;transform:translateY(-3px)}}@media(prefers-reduced-motion:reduce){.ds-button{transition-duration:.1s}}"
+    },
+    {
+      "name": "Campo de contato escuro",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Label persistente e linha inferior sobre marinho.",
+      "html": "<label class=\"ds-field\">Seu nome<input autocomplete=\"name\" placeholder=\"Como podemos chamar você?\" required></label>",
+      "css": ".ds-field{display:block;padding:20px;background:#0c1429;color:#e5edff;font:400 15px Barlow,sans-serif}.ds-field input{display:block;width:100%;min-height:52px;margin-top:6px;padding:13px 0;border:0;border-bottom:1px solid #51607f;border-radius:0;background:transparent;color:var(--ink,#f1f5ff);caret-color:#709bff;font:400 16px Barlow,sans-serif}.ds-field input::placeholder{color:#a3b2ce;opacity:1}.ds-field input:focus-visible{outline:3px solid #8fb1ff;outline-offset:3px}"
+    },
+    {
+      "name": "Alternância de captura",
+      "kind": "custom",
+      "refersTo": "preview-switch",
+      "description": "Referência visual dos estados Desktop/Mobile; comportamento pertence ao React.",
+      "html": "<div class=\"ds-preview\" role=\"group\" aria-label=\"Visualização do projeto\"><button aria-pressed=\"true\">Desktop</button><button aria-pressed=\"false\">Mobile</button></div>",
+      "css": ".ds-preview{display:inline-flex;gap:3px;padding:4px;border-radius:30px;background:#080d1b}.ds-preview button{border:0;border-radius:24px;padding:9px 17px;background:transparent;color:#c5d0e4;font:400 13px Barlow,sans-serif;cursor:pointer;transition:background 200ms,color 200ms}.ds-preview button[aria-pressed=true]{background:#edf3ff;color:#080d1b}.ds-preview button:focus-visible{outline:3px solid #8fb1ff;outline-offset:3px}@media(hover:hover) and (pointer:fine){.ds-preview button:hover{background:#29406e;color:white}.ds-preview button[aria-pressed=true]:hover{background:white;color:#080d1b}}@media(prefers-reduced-motion:reduce){.ds-preview button{transition-duration:.1s}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Assinatura AT espacial",
+    "overview": "Assinatura AT espacial com três órbitas contínuas, satélites luminosos e pausa acessível. Globo conecta estúdio aos trabalhos. Projetos em quatro composições próprias e faixas tipográficas grandes com stacks confirmadas nos códigos indicados pelo usuário.",
+    "keyCharacteristics": [
+      "Cobalto como luz, ação e matéria 3D.",
+      "Tipografia condensada e capturas reais amplas.",
+      "Perspectiva, máscaras e parallax com propósito.",
+      "Capítulos legíveis e alternativa de movimento reduzido."
+    ],
+    "rules": [
+      {
+        "name": "Cor contextual",
+        "body": "Cores dos clientes ficam nos enquadramentos dos próprios projetos.",
+        "section": "colors"
+      },
+      {
+        "name": "Escala contextual",
+        "body": "Hero e assinatura de rodapé têm escala própria; controles preservam legibilidade.",
+        "section": "typography"
+      },
+      {
+        "name": "Profundidade espacial",
+        "body": "Sombras sustentam objetos e luz; não transformar todo conteúdo em cartões.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preservar o JPEG e distinguir a interpretação 3D da marca oficial.",
+      "Do manter teclado, contraste, fallback e movimento reduzido.",
+      "Do pausar cenas fora de tela e renderizar sob demanda.",
+      "Do manter o capítulo ativo legível em todo seu intervalo.",
+      "Do oferecer pausa para órbitas e marquees; respeitar movimento reduzido e visibilidade."
+    ],
+    "donts": [
+      "Don't atribuir stacks ou resultados aos clientes sem confirmação.",
+      "Don't condicionar conteúdo ou contato ao WebGL.",
+      "Don't depender de hover no toque."
+    ]
+  }
+}

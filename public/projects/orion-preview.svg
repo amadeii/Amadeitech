@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1000" viewBox="0 0 1440 1000" fill="none">
+  <title>ORION — ilustração de software</title>
+  <desc>Composição ilustrativa de janelas em azul, sem representar a interface ou as funcionalidades do ORION.</desc>
+  <rect width="1440" height="1000" fill="#0B1630"/>
+  <rect x="152" y="160" width="1136" height="680" rx="16" fill="#152B55"/>
+  <rect x="120" y="192" width="1136" height="680" rx="16" fill="#214AAD"/>
+  <rect x="184" y="128" width="1136" height="680" rx="16" fill="#091125"/>
+  <path d="M200 128H1304A16 16 0 0 1 1320 144V184H184V144A16 16 0 0 1 200 128Z" fill="#1B2E50"/>
+  <circle cx="216" cy="156" r="5" fill="#7C98C7"/>
+  <circle cx="238" cy="156" r="5" fill="#7C98C7"/>
+  <circle cx="260" cy="156" r="5" fill="#7C98C7"/>
+  <rect x="216" y="216" width="196" height="560" rx="8" fill="#101F3D"/>
+  <rect x="244" y="244" width="44" height="44" rx="10" fill="#315CFF"/>
+  <rect x="244" y="328" width="140" height="40" rx="6" fill="#203F7D"/>
+  <rect x="244" y="384" width="96" height="16" rx="4" fill="#29436B"/>
+  <rect x="244" y="424" width="112" height="16" rx="4" fill="#29436B"/>
+  <rect x="244" y="464" width="88" height="16" rx="4" fill="#29436B"/>
+  <rect x="444" y="216" width="844" height="560" rx="8" fill="#12264D"/>
+  <rect x="476" y="248" width="780" height="496" rx="4" fill="#16387F"/>
+  <text x="866" y="523" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="126" letter-spacing="8" fill="#F1F5FF">ORION</text>
+  <text x="866" y="581" text-anchor="middle" font-family="Arial, sans-serif" font-size="23" fill="#B9CDF6">AMADEITECH</text>
+</svg>
