@@ -1049,7 +1049,7 @@ export default function App() {
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} AmadeiTech</span>
           <span className="developer-signature">
-            Desenvolvido por AmadeiDev
+            Desenvolvido por AmadeiTech
           </span>
           <a href="#inicio" className="back-top">
             Voltar ao início
