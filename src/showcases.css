@@ -63,10 +63,10 @@
   margin-top: 22px;
   min-height: 44px;
   padding: 10px 18px;
-  border: 1px solid color-mix(in srgb, var(--project-color), transparent 50%);
+  border: 1px solid #477bff;
   border-radius: 3px;
-  background: color-mix(in srgb, var(--project-color), transparent 90%);
-  color: #f1f5ff;
+  background: #477bff;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
   transition:
@@ -79,8 +79,8 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .story-copy .project-link:hover {
-    border-color: var(--project-color);
-    background: color-mix(in srgb, var(--project-color), transparent 82%);
+    border-color: #315cff;
+    background: #315cff;
   }
 }
 .project .story-copy .technology-marquee {
