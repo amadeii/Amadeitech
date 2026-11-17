@@ -9,8 +9,8 @@ import TextVaporize from "./effects/TextVaporize";
 import { observeViewportReplay } from "./viewportReplay";
 import CinematicText from "./CinematicText";
 import type { TextDirection } from "./CinematicText";
-import { useProjectMotion } from "./useProjectMotion";
-import { useChapterMotion } from "./useChapterMotion";
+import ProjectShowcase from "./ProjectShowcase";
+import FounderPortrait from "./FounderPortrait";
 import OrionOrbit from "./OrionOrbit";
 const HeroScene = lazy(() => import("./HeroScene"));
 const NetworkLines = lazy(() => import("./NetworkField"));
@@ -83,11 +83,20 @@ function useMotion() {
                   : kind === "service"
                     ? 250
                     : 500,
-              delay: heroCopy
-                ? element.matches(".hero-actions")
-                  ? 240
-                  : 160
-                : 0,
+              delay:
+                kind === "founder"
+                  ? 140 +
+                    Array.from(
+                      document.querySelectorAll(
+                        ".founder-copy [data-reveal=founder]",
+                      ),
+                    ).indexOf(element) *
+                      70
+                  : heroCopy
+                    ? element.matches(".hero-actions")
+                      ? 240
+                      : 160
+                    : 0,
               easing: "cubic-bezier(0.23, 1, 0.32, 1)",
               fill: "backwards",
             });
@@ -121,41 +130,6 @@ function ProjectFeature({
   project: Project;
   index: number;
 }) {
-  const [panel, setPanel] = useState(false);
-  const enlarged = useRef<HTMLDialogElement>(null);
-  const visualLink = useRef<HTMLAnchorElement>(null);
-  const previousPanel = useRef(panel);
-  useEffect(() => {
-    if (previousPanel.current === panel) return;
-    previousPanel.current = panel;
-    const el = visualLink.current;
-    const preference = motionPreference();
-    if (!el || preference.matches) return;
-    const wandy = project.id === "wandyfitt";
-    const animation = el.animate(
-      [
-        {
-          opacity: 0.35,
-          clipPath: wandy ? "inset(0 12% 0 0)" : "inset(7% 0 7% 0)",
-          transform: wandy ? "translateX(16px)" : "scale(1.025)",
-        },
-        {
-          opacity: 1,
-          clipPath: "inset(0% 0% 0% 0%)",
-          transform: "translateX(0) scale(1)",
-        },
-      ],
-      { duration: wandy ? 400 : 550, easing: "cubic-bezier(0.23, 1, 0.32, 1)" },
-    );
-    const changed = () => {
-      if (preference.matches) animation.cancel();
-    };
-    preference.addEventListener("change", changed);
-    return () => {
-      animation.cancel();
-      preference.removeEventListener("change", changed);
-    };
-  }, [panel, project.id]);
   const direction: TextDirection[] = [
     "energy",
     "balance",
@@ -165,158 +139,35 @@ function ProjectFeature({
   const titleLines = [
     ["WandyFitt"],
     ["Ares Studio", "Pilates"],
-    ["29", "Beauté"],
+    ["29 Beauté"],
     ["Alanna", "Foto Pet"],
   ];
   return (
     <article
       id={`project-${project.id}`}
-      className={`project project-${index}${project.panel ? " project-chapter" : ""}`}
+      className={`project showcase-story story-${project.id}`}
       data-project={project.id}
       style={{ "--project-color": project.color } as CSSProperties}
     >
-      <div className="project-title">
-        <h3>
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${project.name} (abre em nova aba)`}
-          >
-            <span aria-hidden="true">
-              <CinematicText
-                lines={titleLines[index]}
-                direction={direction[index]}
-              />
-            </span>
-            <Arrow diagonal />
-          </a>
+      <div className="story-title">
+        <h3 aria-label={project.name}>
+          <CinematicText
+            lines={titleLines[index]}
+            direction={direction[index]}
+          />
         </h3>
-        <p className="project-category">{project.category}</p>
+        <p className="story-category">{project.category}</p>
       </div>
-      <div className="project-visual">
-        <div className="project-frame-label">
-          <span>{panel ? "Painel de comando" : "Site público"}</span>
-          <span>{project.name}</span>
-        </div>
-        <a
-          ref={visualLink}
-          href={panel && project.panel ? project.panel.image : project.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`project-image-link ${panel ? "is-panel" : ""}`}
-          onClick={(event) => {
-            if (panel) {
-              event.preventDefault();
-              enlarged.current?.showModal();
-            }
-          }}
-          aria-label={
-            panel
-              ? `Ampliar painel de ${project.name}`
-              : `Visitar ${project.name} (abre em nova aba)`
-          }
-        >
-          <img
-            key={panel ? "panel" : "site"}
-            srcSet={
-              !panel && project.id !== "alanna"
-                ? `/projects/${project.id}-mobile.webp 390w, /projects/${project.id}-desktop.webp 1440w`
-                : undefined
-            }
-            sizes="(max-width: 700px) 90vw, (max-width: 999px) 45vw, 65vw"
-            src={
-              panel && project.panel
-                ? project.panel.image
-                : `/projects/${project.id}-desktop.webp`
-            }
-            width="1440"
-            height="1000"
-            loading="lazy"
-            alt={
-              panel && project.panel
-                ? project.panel.alt
-                : `Captura real do site ${project.name}`
-            }
-          />
-          <span className="visit-project">
-            <Arrow diagonal />
-          </span>
-        </a>
-        {(project.id === "ares" || project.id === "alanna") && (
-          <img
-            className="project-mobile-print"
-            src={`/projects/${project.id}-mobile.webp`}
-            width="390"
-            height="844"
-            loading="lazy"
-            alt={`Composição mobile do site ${project.name}`}
-          />
-        )}
-        {panel && (
-          <button
-            className="project-panel-close"
-            type="button"
-            aria-label={`Fechar painel de ${project.name} e ver site`}
-            onClick={() => setPanel(false)}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              <path d="m6 6 12 12M18 6 6 18" />
-            </svg>
-          </button>
-        )}
-        {project.panel && (
-          <div
-            className="project-view-switch"
-            role="group"
-            aria-label={`Visualização de ${project.name}`}
-          >
-            <button
-              type="button"
-              aria-pressed={!panel}
-              onClick={() => setPanel(false)}
-            >
-              Site público
-            </button>
-            <button
-              type="button"
-              aria-pressed={panel}
-              onClick={() => setPanel(true)}
-            >
-              Painel de comando
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="project-caption">
+      <ProjectShowcase project={project} />
+      <div className="story-copy">
         <p>{project.description}</p>
-        {project.panel && (
-          <div className="project-panel-note">
-            <p>{project.panel.caption}</p>
-            <button
-              type="button"
-              className="text-link"
-              onClick={() => enlarged.current?.showModal()}
-            >
-              Ampliar painel <Arrow diagonal />
-            </button>
-          </div>
-        )}
         <a
           className="text-link project-link"
           href={project.url}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Explorar projeto <Arrow diagonal />
+          Visitar site <Arrow diagonal />
         </a>
         <TechnologyMarquee
           items={project.technologies}
@@ -332,44 +183,6 @@ function ProjectFeature({
           </a>
         )}
       </div>
-      {project.panel && (
-        <dialog
-          className="project-panel-dialog"
-          ref={enlarged}
-          aria-label={`Painel de comando de ${project.name}`}
-        >
-          <div className="panel-dialog-heading">
-            <h4>{project.name} · Painel de comando</h4>
-            <button
-              type="button"
-              autoFocus
-              onClick={() => enlarged.current?.close()}
-              aria-label={`Fechar ampliação de ${project.name}`}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                aria-hidden="true"
-              >
-                <path d="m6 6 12 12M18 6 6 18" />
-              </svg>
-            </button>
-          </div>
-          <div className="panel-dialog-image">
-            <img
-              src={project.panel.image}
-              width="1280"
-              height="800"
-              alt={project.panel.alt}
-            />
-          </div>
-          <p>{project.panel.caption}</p>
-        </dialog>
-      )}
     </article>
   );
 }
@@ -452,30 +265,7 @@ function FounderSection() {
       id="quem-cria"
       aria-labelledby="founder-heading"
     >
-      <div className="founder-portrait" data-reveal="founder">
-        {founder.photo ? (
-          <img
-            src={founder.photo}
-            alt={`Retrato de ${founder.name || founder.signature}`}
-            width="800"
-            height="1000"
-            loading="lazy"
-          />
-        ) : (
-          <div
-            className="founder-photo-slot"
-            role="img"
-            aria-label="Espaço reservado para o retrato de quem está por trás da AmadeiTech"
-          >
-            <span aria-hidden="true">
-              Amadei
-              <br />
-              Dev
-            </span>
-            <p>Retrato em breve</p>
-          </div>
-        )}
-      </div>
+      <FounderPortrait />
       <div className="founder-copy">
         <h2 id="founder-heading">
           <CinematicText
@@ -483,18 +273,22 @@ function FounderSection() {
             direction="balance"
           />
         </h2>
-        <div data-reveal="founder">
-          <h3>{founder.name || founder.signature}</h3>
-          <p>
+        <div>
+          <h3 data-reveal="founder">{founder.name || founder.signature}</h3>
+          <p data-reveal="founder">
             Sou desenvolvedor e trabalho com sites, sistemas empresariais,
             backend e integrações. Na AmadeiTech, conecto essas frentes para
             criar soluções digitais sob medida.
           </p>
-          <p>
+          <p data-reveal="founder">
             Da interface às regras de negócio e à comunicação entre sistemas,
             cada parte precisa fazer sentido para quem usa.
           </p>
-          <ul className="founder-specialties" aria-label="Áreas de atuação">
+          <ul
+            className="founder-specialties"
+            aria-label="Áreas de atuação"
+            data-reveal="founder"
+          >
             <li>Sites & experiências</li>
             <li>Sistemas empresariais</li>
             <li>Backend & APIs</li>
@@ -503,6 +297,7 @@ function FounderSection() {
           {founder.github && (
             <a
               className="text-link founder-github"
+              data-reveal="founder"
               href={founder.github}
               target="_blank"
               rel="noopener noreferrer"
@@ -1090,8 +885,6 @@ function EnterpriseSystems() {
 }
 export default function App() {
   useMotion();
-  useProjectMotion();
-  useChapterMotion();
   const [menu, setMenu] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const hero = useRef<HTMLElement>(null);
@@ -1223,6 +1016,37 @@ export default function App() {
           </div>
         </section>
         <GlobeSection />
+        <section className="services-section" id="servicos">
+          <div className="section-heading" data-reveal="heading">
+            <StaggerFlip text="Ideias em outra dimensão." />
+            <p>
+              Uma página ou uma operação inteira.
+              <br />O ponto de partida é a sua necessidade.
+            </p>
+          </div>
+          <div className="services-list">
+            {services.map((service) => (
+              <a
+                href="#contato"
+                className="service"
+                key={service.name}
+                data-reveal="service"
+              >
+                <h3>{service.name}</h3>
+                <div>
+                  <p>{service.text}</p>
+                  <p>{service.detail}</p>
+                </div>
+                <span className="service-arrow">
+                  <Arrow diagonal />
+                </span>
+              </a>
+            ))}
+          </div>
+          <a className="text-link" href="#contato">
+            Conte o que você precisa <Arrow diagonal />
+          </a>
+        </section>
         <section className="work-section" id="projetos">
           <div className="section-heading" data-reveal="heading">
             <h2>
@@ -1255,37 +1079,6 @@ export default function App() {
           </div>
         </section>
         <EnterpriseSystems />
-        <section className="services-section" id="servicos">
-          <div className="section-heading" data-reveal="heading">
-            <StaggerFlip text="Ideias em outra dimensão." />
-            <p>
-              Uma página ou uma operação inteira.
-              <br />O ponto de partida é a sua necessidade.
-            </p>
-          </div>
-          <div className="services-list">
-            {services.map((service) => (
-              <a
-                href="#contato"
-                className="service"
-                key={service.name}
-                data-reveal="service"
-              >
-                <h3>{service.name}</h3>
-                <div>
-                  <p>{service.text}</p>
-                  <p>{service.detail}</p>
-                </div>
-                <span className="service-arrow">
-                  <Arrow diagonal />
-                </span>
-              </a>
-            ))}
-          </div>
-          <a className="text-link" href="#contato">
-            Conte o que você precisa <Arrow diagonal />
-          </a>
-        </section>
         <FounderSection />
         <Contact />
       </main>
