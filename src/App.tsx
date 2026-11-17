@@ -4,7 +4,6 @@ import { projects, studio, founder } from "./content";
 import type { Project } from "./content";
 import { motionPreference } from "./motion";
 import TextRevealWall from "./TextRevealWall";
-import StaggerFlip from "./effects/StaggerFlip";
 import TextVaporize from "./effects/TextVaporize";
 import { observeResponsiveEntrance } from "./mobileEntrance";
 import CinematicText from "./CinematicText";
@@ -12,6 +11,7 @@ import type { TextDirection } from "./CinematicText";
 import ProjectShowcase from "./ProjectShowcase";
 import FounderPortrait from "./FounderPortrait";
 import OrionOrbit from "./OrionOrbit";
+import ServicesOrbit from "./ServicesOrbit";
 const HeroScene = lazy(() => import("./HeroScene"));
 const NetworkLines = lazy(() => import("./NetworkField"));
 const Globe = lazy(() => import("./Globe"));
@@ -205,25 +205,30 @@ function GlobeSection() {
   }, []);
   return (
     <section
-      className="globe-flow"
+      className="globe-flow orbital-section"
       id="experiencia"
       ref={ref}
       aria-labelledby="globe-flow-heading"
     >
+      <span id="servicos" className="orbital-anchor" aria-hidden="true" />
       <div className="globe-flow-copy">
         <TextRevealWall />
         <h2 id="globe-flow-heading">
-          <CinematicText lines={["Design que aproxima."]} direction="balance" />
+          <CinematicText
+            lines={["Design que aproxima."]}
+            direction="balance"
+            delay={450}
+          />
         </h2>
         <p>
           Design e desenvolvimento juntos para dar forma ao que o seu negócio
           precisa.
         </p>
-        <a className="text-link" href="#contato">
-          Vamos criar o seu projeto <Arrow diagonal />
+        <a className="text-link orbital-desktop-cta" href="#contato">
+          Vamos criar o seu projeto
         </a>
       </div>
-      <div className="globe-flow-art">
+      <ServicesOrbit>
         {ready ? (
           <Suspense
             fallback={
@@ -237,27 +242,13 @@ function GlobeSection() {
         ) : (
           <div className="globe-placeholder" aria-hidden="true" />
         )}
-      </div>
+      </ServicesOrbit>
+      <a className="text-link orbital-mobile-cta" href="#contato">
+        Vamos criar o seu projeto
+      </a>
     </section>
   );
 }
-const services = [
-  {
-    name: "Sites & experiências",
-    text: "Para apresentar o seu negócio com clareza e personalidade.",
-    detail: "Sites institucionais, landing pages e portfólios.",
-  },
-  {
-    name: "Lojas & vendas",
-    text: "Para transformar interesse em uma jornada de compra simples.",
-    detail: "E-commerce, catálogos e experiências de pedidos online.",
-  },
-  {
-    name: "Sistemas sob medida",
-    text: "Para organizar processos que as ferramentas prontas não resolvem.",
-    detail: "Sistemas web, painéis administrativos e soluções personalizadas.",
-  },
-];
 function FounderSection() {
   return (
     <section
@@ -1016,37 +1007,7 @@ export default function App() {
           </div>
         </section>
         <GlobeSection />
-        <section className="services-section" id="servicos">
-          <div className="section-heading" data-reveal="heading">
-            <StaggerFlip text="Ideias em outra dimensão." />
-            <p>
-              Uma página ou uma operação inteira.
-              <br />O ponto de partida é a sua necessidade.
-            </p>
-          </div>
-          <div className="services-list">
-            {services.map((service) => (
-              <a
-                href="#contato"
-                className="service"
-                key={service.name}
-                data-reveal="service"
-              >
-                <h3>{service.name}</h3>
-                <div>
-                  <p>{service.text}</p>
-                  <p>{service.detail}</p>
-                </div>
-                <span className="service-arrow">
-                  <Arrow diagonal />
-                </span>
-              </a>
-            ))}
-          </div>
-          <a className="text-link" href="#contato">
-            Conte o que você precisa <Arrow diagonal />
-          </a>
-        </section>
+        <FounderSection />
         <section className="work-section" id="projetos">
           <div className="section-heading" data-reveal="heading">
             <h2>
@@ -1079,7 +1040,6 @@ export default function App() {
           </div>
         </section>
         <EnterpriseSystems />
-        <FounderSection />
         <Contact />
       </main>
       <footer className="site-footer">

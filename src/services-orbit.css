@@ -1,0 +1,472 @@
+/* A single stage: the original code wall, particle globe and service planes. */
+.globe-flow.orbital-section {
+  position: relative;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(24px, 3vw, 54px);
+  padding: 64px var(--gutter) 58px;
+  background: #060a15;
+}
+.orbital-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.orbital-section .globe-flow-copy {
+  position: relative;
+  z-index: 5;
+  max-width: 440px;
+}
+.orbital-section .globe-flow-copy h2 {
+  font-size: clamp(52px, 4.9vw, 82px);
+  letter-spacing: -0.025em;
+}
+.orbital-section .globe-flow-copy p {
+  max-width: 32ch;
+  color: #c0cce2;
+}
+.orbital-section .globe-flow-copy .text-link {
+  font-size: 16px;
+}
+.orbital-section .services-scene {
+  position: relative;
+  height: clamp(590px, 44vw, 700px);
+  min-width: 0;
+  isolation: isolate;
+}
+.orbital-light {
+  position: absolute;
+  inset: 0 -5%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 54% 48%,
+    #16326a60,
+    #10254b18 45%,
+    transparent 70%
+  );
+}
+.services-orbit {
+  position: absolute;
+  inset: 0;
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+}
+.orbital-globe {
+  position: absolute;
+  width: min(72%, 490px);
+  aspect-ratio: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+}
+/* GlobeStudy's unmodified radius: .318 * 1.28; center Y is .535.
+   This volume fills its transparent ocean and occludes only the far half-orbit. */
+.orbital-globe::before {
+  content: "";
+  position: absolute;
+  left: 9.296%;
+  top: 12.796%;
+  width: 81.408%;
+  height: 81.408%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #0d1931, #060a15 74%);
+  box-shadow: 0 0 65px #2258b514;
+  pointer-events: auto;
+}
+.orbital-globe .globe-experience,
+.orbital-globe .globe-placeholder {
+  position: absolute;
+  inset: 0;
+}
+.orbit-service {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 228px;
+  min-height: 224px;
+  padding: 23px;
+  transform-origin: 0 0;
+  transform-style: preserve-3d;
+  color: #f2f6ff;
+  border: 1px solid #749bd670;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #1d3357 0%, #0d1b33 45%, #0a1428 100%);
+  box-shadow:
+    0 24px 40px #02061070,
+    inset 0 1px 0 #c3dcff60,
+    inset -1px -1px 0 #789cda20;
+  backface-visibility: hidden;
+  transition:
+    border-color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+}
+.orbit-service::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(125deg, #5374a2, #122543 55%, #070f20);
+  border: 1px solid #536e97;
+  transform: translateZ(-7px);
+}
+.orbit-service::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    #d4e6ff0d,
+    transparent 35%,
+    transparent 65%,
+    #6a9dfb08
+  );
+}
+.orbit-service svg {
+  display: block;
+  width: 29px;
+  height: 29px;
+  margin-bottom: 20px;
+  color: #b3d0ff;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.orbit-service h3 {
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 13px;
+}
+.orbit-service p {
+  color: #d4def0;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.orbit-detail {
+  display: block;
+  color: #a9bddb;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-top: 14px;
+}
+.orbit-service:focus-visible {
+  outline: 2px solid #d6e7ff;
+  outline-offset: 5px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .orbit-service:hover {
+    border-color: #bdd6ff;
+    box-shadow:
+      0 28px 45px #02061080,
+      0 0 30px #407bd52b,
+      inset 0 1px 0 #e1eeff80;
+  }
+}
+.services-scene[data-orbit-entry="pending"] .orbital-globe,
+.services-scene[data-orbit-entry="pending"] .orbit-service {
+  opacity: 0;
+}
+.orbit-service:nth-of-type(1) {
+  transform: translate3d(205px, 60px, 115px) rotateY(-20deg)
+    translate(-50%, -50%);
+}
+.orbit-service:nth-of-type(2) {
+  transform: translate3d(-205px, 60px, 115px) rotateY(20deg)
+    translate(-50%, -50%);
+}
+.orbit-service:nth-of-type(3) {
+  transform: translate3d(0, -142px, -230px) translate(-50%, -50%);
+}
+/* The compact version keeps every service readable while the globe remains live.
+   Each panel has a small depth drift, rather than crossing over another panel. */
+@media (max-width: 999px) {
+  .globe-flow.orbital-section {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+  .orbital-section .globe-flow-copy {
+    max-width: 660px;
+  }
+  .orbital-section .globe-flow-copy h2 {
+    font-size: clamp(44px, 7vw, 68px);
+  }
+  .orbital-section .globe-flow-copy p {
+    max-width: 42ch;
+  }
+  .orbital-section .services-scene {
+    height: auto;
+    width: min(100%, 650px);
+    margin-inline: auto;
+  }
+  .services-orbit {
+    position: relative;
+    padding-top: 330px;
+    perspective: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .orbital-globe {
+    width: 380px;
+    max-width: 100%;
+    top: 165px;
+  }
+  .orbital-light {
+    inset: 0 0 35%;
+  }
+  .orbit-service {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-height: 0;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    column-gap: 16px;
+    transform-origin: 50% 50%;
+  }
+  .orbit-service svg {
+    grid-row: 1 / 4;
+    margin: 0;
+  }
+  .orbit-service h3 {
+    font-size: 25px;
+    margin-bottom: 8px;
+  }
+  .orbit-service p {
+    font-size: 15px;
+  }
+  .orbit-detail {
+    grid-column: 2;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  .orbit-service:nth-of-type(n) {
+    transform: none;
+  }
+}
+@media (max-width: 699px) {
+  .globe-flow.orbital-section {
+    padding: 38px 22px 36px;
+  }
+  .orbital-section .globe-flow-copy h2 {
+    font-size: clamp(44px, 10.5vw, 58px);
+  }
+  .orbital-section .globe-flow-copy p {
+    margin: 20px 0;
+    font-size: 16px;
+  }
+  .orbital-section .text-reveal-wall {
+    margin-bottom: 20px;
+  }
+  .services-orbit {
+    padding-top: min(88vw, 330px);
+    gap: 12px;
+  }
+  .orbital-globe {
+    width: min(100%, 360px);
+    top: min(44vw, 165px);
+  }
+  .orbit-service {
+    padding: 18px 16px;
+    column-gap: 13px;
+  }
+  .orbit-service h3 {
+    font-size: 24px;
+  }
+  .orbit-detail {
+    display: none;
+  }
+}
+:root[data-motion="reduce"] .services-scene .orbital-globe,
+:root[data-motion="reduce"] .services-scene .orbit-service {
+  opacity: 1;
+}
+@media (min-width: 1000px) {
+  :root[data-motion="reduce"] .orbital-section .services-scene {
+    height: 650px;
+  }
+  :root[data-motion="reduce"] .orbital-globe {
+    top: 230px;
+    width: min(68%, 430px);
+  }
+  :root[data-motion="reduce"] .services-orbit {
+    perspective: none;
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    padding-top: 450px;
+  }
+  :root[data-motion="reduce"] .orbit-service {
+    position: relative;
+    inset: auto;
+    width: 0;
+    flex: 1;
+    transform: none;
+    padding: 18px;
+    min-height: 0;
+  }
+  :root[data-motion="reduce"] .orbit-service h3 {
+    font-size: 23px;
+  }
+  :root[data-motion="reduce"] .orbit-detail {
+    display: none;
+  }
+}
+/* Mobile keeps the same world-space orbit. Desktop and tablet rules above stay
+   intact; only reduced motion deliberately replaces movement with a readable list. */
+.orbit-mobile-action,
+.orbital-section .orbital-mobile-cta {
+  display: none;
+}
+@media (max-width: 767px) {
+  .orbital-section .globe-flow-copy {
+    display: contents;
+  }
+  .orbital-section .text-reveal-wall {
+    order: 0;
+  }
+  .orbital-section .globe-flow-copy h2 {
+    order: 1;
+  }
+  .orbital-section .globe-flow-copy p {
+    order: 2;
+    margin: 10px 0 0;
+  }
+  .orbital-section .globe-flow-copy .orbital-desktop-cta {
+    display: none;
+  }
+  .orbital-section .orbital-mobile-cta {
+    display: inline-flex;
+    order: 4;
+    justify-self: start;
+    margin-top: 0;
+    font-size: 16px;
+  }
+  .orbital-section .services-scene {
+    order: 3;
+    height: 560px;
+    width: 100%;
+  }
+  .services-orbit {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    display: block;
+    perspective: 820px;
+    perspective-origin: 50% 50%;
+  }
+  .orbital-globe {
+    width: 84%;
+    max-width: 340px;
+    top: 50%;
+  }
+  .orbital-light {
+    inset: 0 -2%;
+  }
+  .orbit-service {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(150px, 41vw, 178px);
+    min-height: 176px;
+    padding: 15px 14px;
+    display: block;
+    transform-origin: 0 0;
+  }
+  .orbit-service svg {
+    width: 23px;
+    height: 23px;
+    margin-bottom: 12px;
+  }
+  .orbit-service h3 {
+    font-size: 21px;
+    line-height: 1.08;
+    margin-bottom: 10px;
+  }
+  .orbit-service p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .orbit-detail {
+    display: none;
+  }
+  .orbit-service[data-selected="true"] {
+    border-color: #d4e6ff;
+  }
+  .orbit-service[data-selected="true"] .orbit-mobile-action {
+    display: block;
+    font-size: 12px;
+    line-height: 1.3;
+    margin-top: 14px;
+    color: #d4e6ff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  :root[data-motion="reduce"] .orbital-section .services-scene {
+    height: auto;
+  }
+  :root[data-motion="reduce"] .services-orbit {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: min(88vw, 330px);
+    perspective: none;
+  }
+  :root[data-motion="reduce"] .orbital-globe {
+    top: min(44vw, 165px);
+  }
+  :root[data-motion="reduce"] .orbit-service {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    min-height: 0;
+    transform: none;
+    padding: 18px;
+  }
+  :root[data-motion="reduce"] .orbit-service svg {
+    float: left;
+    margin: 0 14px 50px 0;
+  }
+}
+@media (max-width: 767px) {
+  .orbital-globe {
+    width: 92%;
+  }
+  .orbit-service {
+    display: grid;
+    grid-template-columns: 23px minmax(0, 1fr);
+    column-gap: 9px;
+  }
+  .orbit-service svg {
+    grid-row: 1;
+    margin: 0;
+  }
+  .orbit-service h3 {
+    font-size: 20px;
+    margin: 0;
+  }
+  .orbit-service p {
+    grid-column: 1 / -1;
+    margin-top: 12px;
+  }
+  .orbit-mobile-action {
+    grid-column: 1 / -1;
+  }
+  :root[data-motion="reduce"] .orbit-service {
+    grid-template-columns: 23px minmax(0, 1fr);
+  }
+  :root[data-motion="reduce"] .orbit-service svg {
+    float: none;
+    margin: 0;
+  }
+}

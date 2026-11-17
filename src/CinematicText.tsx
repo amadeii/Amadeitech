@@ -16,9 +16,11 @@ export type TextDirection =
 export default function CinematicText({
   lines,
   direction = "atelier",
+  delay = 0,
 }: {
   lines: string[];
   direction?: TextDirection;
+  delay?: number;
 }) {
   const root = useRef<HTMLSpanElement>(null);
   const content = lines.join("\n");
@@ -79,12 +81,13 @@ export default function CinematicText({
                   ? 1300
                   : 1100,
             delay:
+              delay +
               index *
-              (direction === "atelier" || direction === "finale"
-                ? 140
-                : glyphs
-                  ? 35
-                  : 65),
+                (direction === "atelier" || direction === "finale"
+                  ? 140
+                  : glyphs
+                    ? 35
+                    : 65),
             easing: "cubic-bezier(0.23, 1, 0.32, 1)",
             fill: "backwards",
           },
@@ -113,7 +116,7 @@ export default function CinematicText({
       preference.removeEventListener("change", changed);
       document.removeEventListener("visibilitychange", changed);
     };
-  }, [content, direction]);
+  }, [content, direction, delay]);
 
   return (
     <span className={`cinematic-text cinema-${direction}`} ref={root}>
