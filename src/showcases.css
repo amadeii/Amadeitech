@@ -337,8 +337,7 @@
   color: #9eafca;
 }
 .hint-mobile,
-.showcase-phone-island,
-.showcase-phone-home {
+.showcase-phone-island {
   display: none;
 }
 .showcase[data-instant="true"] .showcase-screen,
@@ -550,19 +549,6 @@ html[data-motion="reduce"] .showcase-camera {
     height: 12px;
     background: #070b13;
     border-radius: 20px;
-    z-index: 3;
-    pointer-events: none;
-  }
-  .showcase-phone-home {
-    display: block;
-    position: absolute;
-    bottom: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30%;
-    height: 3px;
-    background: #fff9;
-    border-radius: 4px;
     z-index: 3;
     pointer-events: none;
   }

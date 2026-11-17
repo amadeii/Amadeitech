@@ -289,26 +289,7 @@ export default function ProjectShowcase({ project }: { project: Project }) {
                   />
                 </picture>
               ))}
-              <div className="iphone-status" aria-hidden="true">
-                <span>9:41</span>
-                <svg viewBox="0 0 54 12" fill="currentColor">
-                  <path d="M0 9h2v3H0zm4-3h2v6H4zm4-3h2v9H8zm4-3h2v12h-2zM19 3q6-5 12 0l-1.5 1.5q-4.5-3.5-9 0zm3 3q3-2.5 6 0l-1.5 1.5q-1.5-1-3 0zm2 3h2v2h-2z" />
-                  <rect
-                    x="35"
-                    y="1"
-                    width="16"
-                    height="10"
-                    rx="2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                  />
-                  <rect x="37" y="3" width="12" height="6" rx=".6" />
-                  <path d="M52 4h1v4h-1z" />
-                </svg>
-              </div>
               <span className="showcase-phone-island" aria-hidden="true" />
-              <span className="showcase-phone-home" aria-hidden="true" />
             </div>
           </div>
         </div>

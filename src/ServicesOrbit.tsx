@@ -41,6 +41,7 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
       speed = 1;
     let hovered = -1,
       focused = -1;
+    let focusReleased = false;
     let width = el.clientWidth;
     let compact = innerWidth < 1000;
     let mobile = innerWidth < 768;
@@ -66,8 +67,8 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
         const z = Math.sin(angle) * (mobile ? 145 : 230);
         const active = mobile
           ? selected === index ||
-            (focused === index && card.matches(":focus-visible"))
-          : focused !== -1
+            (focused === index && !focusReleased && card.matches(":focus-visible"))
+          : focused !== -1 && !focusReleased
             ? focused === index
             : hovered === index;
         const yaw = -Math.cos(angle) * 24;
@@ -165,13 +166,13 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
       }
       const dt = previous ? Math.min(now - previous, 64) : 0;
       previous = now;
-      // Touch leaves anchors focused even after scrolling. Only keyboard focus
-      // may hold a mobile orbit; touch selection has a bounded reading pause.
+      // Keep keyboard focus on the button when the user explicitly resumes.
+      // A retained DOM focus must not silently reapply the reading pause.
       const keyboardFocus =
         focused !== -1 && cards[focused].matches(":focus-visible");
       const stopped =
-        (mobile ? keyboardFocus : focused !== -1) ||
-        (mobile && selected !== -1);
+        (!focusReleased && (mobile ? keyboardFocus : focused !== -1)) ||
+        selected !== -1;
       const target = stopped ? 0 : !mobile && hovered !== -1 ? 0.035 : 1;
       if (!stopped) foregroundSlot = null;
       speed += (target - speed) * (1 - Math.exp(-dt / 320));
@@ -197,11 +198,10 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
         schedule();
       },
       onExit() {
-        if (mobile) {
-          clearTimeout(selectionTimer);
-          selected = -1;
-          cards.forEach((card) => delete card.dataset.selected);
-        }
+        clearTimeout(selectionTimer);
+        selected = -1;
+        focusReleased = true;
+        cards.forEach((card) => delete card.dataset.selected);
         visible = false;
         previous = 0;
         cancelAnimationFrame(frame);
@@ -215,7 +215,6 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
       compact = innerWidth < 1000;
       mobile = innerWidth < 768;
       cardWidth = cards[0].offsetWidth;
-      if (!mobile) selected = -1;
       schedule();
     });
     resize.observe(el);
@@ -230,6 +229,7 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
     };
     const focus = (event: FocusEvent) => {
       focused = cards.indexOf(event.target as HTMLButtonElement);
+      focusReleased = false;
       promote(focused);
       clearEntries();
       el.dataset.orbitEntry = "active";
@@ -237,7 +237,7 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
     };
     const blur = () => {
       focused = -1;
-      schedule();
+      resume();
     };
     const changed = () => {
       previous = 0;
@@ -251,31 +251,34 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
       }
       schedule();
     };
+    const resume = () => {
+      selected = -1;
+      focusReleased = true;
+      hovered = -1;
+      clearTimeout(selectionTimer);
+      schedule();
+    };
     const select = (event: MouseEvent) => {
-      if (!mobile || preference.matches || event.detail === 0) return;
+      if (preference.matches) return;
       const index = cards.indexOf(event.currentTarget as HTMLButtonElement);
-      if (selected === index) return;
-      event.preventDefault();
+      if (selected === index) {
+        resume();
+        return;
+      }
       promote(index);
       selected = index;
+      focusReleased = false;
       clearTimeout(selectionTimer);
-      selectionTimer = window.setTimeout(() => {
-        selected = -1;
-        schedule();
-      }, 5000);
+      selectionTimer = window.setTimeout(resume, 5000);
       schedule();
     };
     const dismiss = (event: PointerEvent) => {
       if (
-        !mobile ||
-        selected === -1 ||
+        (selected === -1 && focused === -1) ||
         cards.some((card) => card.contains(event.target as Node))
       )
         return;
-      selected = -1;
-      clearTimeout(selectionTimer);
-      cards.forEach((card) => card.blur());
-      schedule();
+      resume();
     };
     document.addEventListener("pointerdown", dismiss);
     cards.forEach((card) => {

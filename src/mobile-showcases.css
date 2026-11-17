@@ -1,5 +1,4 @@
-.iphone-hardware,
-.iphone-status {
+.iphone-hardware {
   display: none;
 }
 
@@ -57,24 +56,6 @@
   .showcase-screen > img {
     object-fit: cover;
   }
-  .iphone-status {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: absolute;
-    inset: 0 7.5% auto;
-    height: 5.795%;
-    font:
-      600 clamp(9px, 2.6vw, 12px) / 1 Arial,
-      sans-serif;
-    letter-spacing: -0.035em;
-    pointer-events: none;
-    z-index: 4;
-  }
-  .iphone-status svg {
-    width: 18%;
-    height: auto;
-  }
   .showcase-phone-island {
     top: 1.25%;
     width: 30.8%;
@@ -98,13 +79,6 @@
       #020304 65%
     );
     box-shadow: 0 0 0 1px #101410;
-  }
-  .showcase-phone-home {
-    width: 33%;
-    height: 3px;
-    bottom: 1.15%;
-    background: #252b2866;
-    mix-blend-mode: difference;
   }
   .showcase-glass {
     inset: 1.6% 3%;
