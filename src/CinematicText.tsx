@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motionPreference } from "./motion";
-import { observeViewportReplay } from "./viewportReplay";
+import { observeResponsiveEntrance } from "./mobileEntrance";
 
 export type TextDirection =
   | "atelier"
@@ -96,14 +96,14 @@ export default function CinematicText({
         if (generation === run) element.dataset.cinematic = "rest";
       });
     };
-    const visibility = observeViewportReplay(element, {
+    const visibility = observeResponsiveEntrance(element, {
       onEnter: play,
       onExit: stop,
       threshold: 0.16,
     });
     const changed = () => {
       if (preference.matches || document.hidden) stop();
-      else if (visibility.visible) play();
+      else if (visibility.visible && innerWidth >= 768) play();
     };
     preference.addEventListener("change", changed);
     document.addEventListener("visibilitychange", changed);

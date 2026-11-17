@@ -3,7 +3,8 @@ import type { PointerEvent, KeyboardEvent } from "react";
 import type { Project } from "./content";
 import { showcaseScreens } from "./showcaseScreens";
 import { motionPreference } from "./motion";
-import { observeViewportReplay } from "./viewportReplay";
+import { observeResponsiveEntrance } from "./mobileEntrance";
+import IPhoneHardware from "./IPhoneHardware";
 
 // Screens stay mounted: transitions retarget naturally even when a visitor
 // changes direction mid-reveal. Pointer motion never causes React renders.
@@ -30,6 +31,7 @@ export default function ProjectShowcase({ project }: { project: Project }) {
     let animation: Animation | undefined;
     let scrollFrame = 0;
     let visible = false;
+    let previousWidth = innerWidth;
     const reset = () => {
       animation?.cancel();
       depth.style.removeProperty("transform");
@@ -52,8 +54,13 @@ export default function ProjectShowcase({ project }: { project: Project }) {
       if (visible && !scrollFrame && !preference.matches)
         scrollFrame = requestAnimationFrame(update);
     };
-    const observer = observeViewportReplay(el, {
+    const observer = observeResponsiveEntrance(el, {
       threshold: 0.12,
+      onSettle() {
+        visible = true;
+        el.dataset.visible = "true";
+        schedule();
+      },
       onEnter() {
         visible = true;
         el.dataset.visible = "true";
@@ -84,14 +91,27 @@ export default function ProjectShowcase({ project }: { project: Project }) {
               opacity: 0.5,
             },
           };
+          const mobile = innerWidth < 768;
+          const mobileStarts: Record<string, string> = {
+            wandyfitt:
+              "perspective(1400px) translateY(22px) rotateY(-6deg) scale(.97)",
+            ares: "perspective(1400px) translateY(26px) rotateX(5deg) scale(.98)",
+            beaute:
+              "perspective(1400px) translateY(18px) rotateY(4deg) scale(.98)",
+            alanna:
+              "perspective(1400px) translateY(24px) rotateZ(-1.5deg) scale(.97)",
+          };
           animation = entrance.animate(
             [
-              starts[project.id],
+              mobile
+                ? { transform: mobileStarts[project.id], opacity: 0 }
+                : starts[project.id],
               {
                 transform:
                   "perspective(1400px) translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0) scale(1)",
-                clipPath:
-                  project.id === "beaute"
+                clipPath: mobile
+                  ? "none"
+                  : project.id === "beaute"
                     ? "ellipse(80% 90% at 50% 50%)"
                     : "inset(0% 0% 0% 0% round 0%)",
                 opacity: 1,
@@ -112,15 +132,21 @@ export default function ProjectShowcase({ project }: { project: Project }) {
         reset();
       },
     });
+    const resize = () => {
+      // Mobile browser chrome changes height while scrolling. That is not a
+      // layout change and must not cancel an entrance halfway through.
+      if (innerWidth >= 768 || innerWidth !== previousWidth) reset();
+      previousWidth = innerWidth;
+    };
     window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", reset);
+    window.addEventListener("resize", resize);
     preference.addEventListener("change", reset);
     document.addEventListener("visibilitychange", reset);
     return () => {
       observer.dispose();
       reset();
       window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", reset);
+      window.removeEventListener("resize", resize);
       preference.removeEventListener("change", reset);
       document.removeEventListener("visibilitychange", reset);
     };
@@ -212,6 +238,7 @@ export default function ProjectShowcase({ project }: { project: Project }) {
       <div className="showcase-depth">
         <div className="showcase-entrance">
           <div className="showcase-camera" ref={camera}>
+            <IPhoneHardware />
             <div className="showcase-browser-bar" aria-hidden="true">
               <span className="showcase-window-marks">
                 <i />
@@ -263,6 +290,24 @@ export default function ProjectShowcase({ project }: { project: Project }) {
                   />
                 </picture>
               ))}
+              <div className="iphone-status" aria-hidden="true">
+                <span>9:41</span>
+                <svg viewBox="0 0 54 12" fill="currentColor">
+                  <path d="M0 9h2v3H0zm4-3h2v6H4zm4-3h2v9H8zm4-3h2v12h-2zM19 3q6-5 12 0l-1.5 1.5q-4.5-3.5-9 0zm3 3q3-2.5 6 0l-1.5 1.5q-1.5-1-3 0zm2 3h2v2h-2z" />
+                  <rect
+                    x="35"
+                    y="1"
+                    width="16"
+                    height="10"
+                    rx="2"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  />
+                  <rect x="37" y="3" width="12" height="6" rx=".6" />
+                  <path d="M52 4h1v4h-1z" />
+                </svg>
+              </div>
               <span className="showcase-phone-island" aria-hidden="true" />
               <span className="showcase-phone-home" aria-hidden="true" />
             </div>

@@ -83,7 +83,7 @@ try {
           `${id} offcenter ${JSON.stringify(metrics)}`,
         );
         assert.ok(metrics.currentSrc.endsWith("-mobile.webp"));
-        assert.ok(Math.abs(metrics.ratio - 390 / 844) < 0.002);
+        assert.ok(Math.abs(metrics.ratio - 278 / 604) < 0.002);
       } else assert.ok(metrics.currentSrc.endsWith("-desktop.webp"));
       assert.equal(
         await story.locator(".project-link").getAttribute("href"),

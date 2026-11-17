@@ -6,7 +6,7 @@ import { motionPreference } from "./motion";
 import TextRevealWall from "./TextRevealWall";
 import StaggerFlip from "./effects/StaggerFlip";
 import TextVaporize from "./effects/TextVaporize";
-import { observeViewportReplay } from "./viewportReplay";
+import { observeResponsiveEntrance } from "./mobileEntrance";
 import CinematicText from "./CinematicText";
 import type { TextDirection } from "./CinematicText";
 import ProjectShowcase from "./ProjectShowcase";
@@ -47,7 +47,7 @@ function useMotion() {
         "[data-reveal=service], [data-reveal=system], [data-reveal=founder], .intro-section > div, .section-heading > p, .contact-intro > p, .brief-form, .hero-content > p, .hero-actions, .hero-art",
       ),
     ).map((element) =>
-      observeViewportReplay(element, {
+      observeResponsiveEntrance(element, {
         onEnter() {
           if (!reduced.matches && !document.hidden) {
             const kind = element.dataset.reveal;

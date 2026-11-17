@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { founder } from "./content";
 import { motionPreference } from "./motion";
-import { observeViewportReplay } from "./viewportReplay";
+import { observeResponsiveEntrance } from "./mobileEntrance";
 
 export default function FounderPortrait() {
   const ref = useRef<HTMLDivElement>(null);
@@ -14,7 +14,7 @@ export default function FounderPortrait() {
       animations.forEach((a) => a.cancel());
       animations = [];
     };
-    const observer = observeViewportReplay(el, {
+    const observer = observeResponsiveEntrance(el, {
       onEnter() {
         stop();
         if (preference.matches || document.hidden) return;

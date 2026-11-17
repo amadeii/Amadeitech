@@ -9,6 +9,7 @@ import "./cinematic.css";
 import "./refinements.css";
 import "./orion-composition.css";
 import "./showcases.css";
+import "./mobile-showcases.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
