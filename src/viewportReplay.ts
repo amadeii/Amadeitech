@@ -2,6 +2,7 @@ type ReplayOptions = {
   onEnter: () => void;
   onExit?: () => void;
   threshold?: number;
+  rootMargin?: string;
 };
 
 // Entry uses a small inset so a reveal's 24px travel cannot move its own
@@ -9,7 +10,7 @@ type ReplayOptions = {
 // Crossing the trigger threshold repeatedly never restarts an active reveal.
 export function observeViewportReplay(
   element: Element,
-  { onEnter, onExit, threshold = 0.12 }: ReplayOptions,
+  { onEnter, onExit, threshold = 0.12, rootMargin = "-32px 0px -32px 0px" }: ReplayOptions,
 ) {
   let armed = true;
   let active = false;
@@ -38,7 +39,7 @@ export function observeViewportReplay(
       active = true;
       onEnter();
     },
-    { threshold: [0, threshold], rootMargin: "-32px 0px -32px 0px" },
+    { threshold: [0, threshold], rootMargin },
   );
   exitObserver.observe(element);
   entryObserver.observe(element);

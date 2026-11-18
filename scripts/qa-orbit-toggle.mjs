@@ -10,9 +10,9 @@ try {for(const width of [1440,393]){
  await p.goto('http://127.0.0.1:5173/',{waitUntil:'networkidle'});
  await p.locator('.services-scene').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await p.waitForTimeout(1700);
  const phase=()=>p.locator('.services-scene').getAttribute('data-phase').then(Number);
- async function paused(){await p.waitForTimeout(100);const a=await phase();await p.waitForTimeout(200);assert.equal(await phase(),a,'selected card pauses orbit');}
+ async function paused(){await p.waitForTimeout(1050);const a=await phase();await p.waitForTimeout(200);assert.equal(await phase(),a,'selected card settles smoothly, then pauses orbit');}
  async function moving(){const a=await phase();await p.waitForTimeout(750);const delta=((await phase())-a+2*Math.PI)%(2*Math.PI);assert.ok(delta>.045,'orbit visibly resumes');return delta;}
- async function clickCard(){const i=await p.locator('.orbit-service').evaluateAll(es=>es.reduce((best,e,i)=>+e.dataset.depth>+es[best].dataset.depth?i:best,0));const r=await p.locator('.orbit-service').nth(i).boundingBox();if(width<768)await p.touchscreen.tap(r.x+r.width/2,r.y+r.height/2);else await p.mouse.click(r.x+r.width/2,r.y+r.height/2);return i;}
+ async function clickCard(){const i=await p.locator('.orbit-service').evaluateAll(es=>es.reduce((best,e,i)=>+e.dataset.depth>+es[best].dataset.depth?i:best,0));const point=await p.locator('.orbit-service').nth(i).evaluate(e=>{const r=e.getBoundingClientRect();for(const fx of [.5,.3,.7])for(const fy of [.5,.3,.7]){const x=r.x+r.width*fx,y=r.y+r.height*fy;if(e.contains(document.elementFromPoint(x,y)))return {x,y};}});assert.ok(point);if(width<768)await p.touchscreen.tap(point.x,point.y);else await p.mouse.click(point.x,point.y);return i;}
  const originalUrl=p.url();const index=await clickCard();await paused();await p.screenshot({path:`${dir}/paused-${width}.png`});
  const r=await p.locator('.orbit-service').nth(index).boundingBox();if(width<768)await p.touchscreen.tap(r.x+r.width/2,r.y+r.height/2);else await p.mouse.click(r.x+r.width/2,r.y+r.height/2);
  const secondClickDelta=await moving();await p.screenshot({path:`${dir}/resumed-${width}.png`});

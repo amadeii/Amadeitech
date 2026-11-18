@@ -49,6 +49,7 @@
   inset: 0;
   perspective: 1100px;
   perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
 }
 .orbital-globe {
   position: absolute;
@@ -57,7 +58,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
   pointer-events: none;
 }
 /* GlobeStudy's unmodified radius: .318 * 1.28; center Y is .535.
@@ -82,6 +82,7 @@
 .orbit-service {
   text-align: left;
   position: absolute;
+  z-index: auto;
   top: 50%;
   left: 50%;
   width: 228px;
@@ -260,6 +261,29 @@
     transform: none;
   }
 }
+/* Tablets use the same spatial scene; reduced motion retains the readable list. */
+@media (min-width: 768px) and (max-width: 999px) {
+  :root[data-motion="full"] .orbital-section .services-scene {
+    height: 620px;
+  }
+  :root[data-motion="full"] .services-orbit {
+    position: absolute;
+    padding: 0;
+    display: block;
+  }
+  :root[data-motion="full"] .orbital-globe {
+    top: 50%;
+  }
+  :root[data-motion="full"] .orbit-service {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 228px;
+    min-height: 224px;
+    display: block;
+    transform-origin: 0 0;
+  }
+}
 @media (max-width: 699px) {
   .globe-flow.orbital-section {
     padding: 38px 22px 36px;
@@ -296,6 +320,9 @@
 :root[data-motion="reduce"] .services-scene .orbital-globe,
 :root[data-motion="reduce"] .services-scene .orbit-service {
   opacity: 1;
+}
+:root[data-motion="reduce"] .services-orbit {
+  transform-style: flat;
 }
 @media (min-width: 1000px) {
   :root[data-motion="reduce"] .orbital-section .services-scene {

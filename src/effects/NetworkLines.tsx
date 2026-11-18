@@ -3,6 +3,7 @@
 
 import { effectLoop } from "../effectLoop";
 import { motionPreference } from "../motion";
+import { observeHeroPointer } from "../heroPointer";
 import type { RefObject } from "react";
 
 import * as React from "react";
@@ -465,7 +466,7 @@ function NetworkLinesCanvas(props: ConstellationFieldProps) {
       }
       gl.viewport(0, 0, bw, bh);
 
-      const wantN = Math.min(v.density as number, cw < 500 ? 85 : 138);
+      const wantN = v.density as number;
       if (wantN !== builtFor) {
         build(wantN, cw, ch);
         builtFor = wantN;
@@ -604,15 +605,9 @@ function NetworkLinesCanvas(props: ConstellationFieldProps) {
 
     // The rect RATIO is zoom-invariant — offset and size scale together — so
     // this is safe on a zoomed Framer canvas where absolute px are not.
-    const pointerHost = canvas.closest(".hero-art") || canvas;
-    const track = (event: Event) => {
-      const e = event as PointerEvent;
-      if (
-        motionPreference().matches ||
-        controls.current.paused ||
-        e.pointerType === "touch"
-      )
-        return;
+    const pointerHost = canvas.closest<HTMLElement>(".hero-art") || canvas;
+    const track = (e: PointerEvent) => {
+      if (motionPreference().matches || controls.current.paused) return;
       const r = canvas.getBoundingClientRect();
       if (r.width <= 0 || r.height <= 0) return;
       const cw = sizeRef.current.w || canvas.clientWidth || 1200;
@@ -625,9 +620,7 @@ function NetworkLinesCanvas(props: ConstellationFieldProps) {
       ptrRef.current.y = -10000;
     };
 
-    pointerHost.addEventListener("pointermove", track);
-    pointerHost.addEventListener("pointerenter", track);
-    pointerHost.addEventListener("pointerleave", onLeave);
+    const unbindPointer = observeHeroPointer(pointerHost, track, onLeave);
 
     const loop = effectLoop(canvas, render, () => controls.current.paused);
     resume.current = loop.schedule;
@@ -649,9 +642,7 @@ function NetworkLinesCanvas(props: ConstellationFieldProps) {
       gl.deleteProgram(nodeProg);
       loop.dispose();
       resume.current = () => {};
-      pointerHost.removeEventListener("pointermove", track);
-      pointerHost.removeEventListener("pointerenter", track);
-      pointerHost.removeEventListener("pointerleave", onLeave);
+      unbindPointer();
     };
   }, []);
 

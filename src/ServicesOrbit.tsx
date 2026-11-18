@@ -43,16 +43,18 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
       focused = -1;
     let focusReleased = false;
     let width = el.clientWidth;
-    let compact = innerWidth < 1000;
     let mobile = innerWidth < 768;
     let cardWidth = cards[0].offsetWidth;
     let selected = -1;
     let selectionTimer = 0;
+    let hoverTimer = 0;
     const slots = [0, 1, 2];
-    let foregroundSlot: number | null = null;
+    let alignment: { delta: number; elapsed: number; applied: number } | null =
+      null;
     let visible = false,
       disposed = false;
     let entries: Animation[] = [];
+    cards.forEach((card) => card.style.removeProperty("z-index"));
 
     function paint() {
       const radius = mobile
@@ -61,53 +63,36 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
       cards.forEach((card, index) => {
         const angle = phase + (slots[index] * Math.PI * 2) / 3;
         const x = Math.cos(angle) * radius;
+        // Tilt the ellipse in screen space. At either depth crossing the cards
+        // travel around the silhouette, rather than through its centre.
         const y =
-          Math.sin(angle) * (mobile ? 132 : 142) +
-          Math.cos(angle) * (mobile ? -18 : -24);
+          Math.sin(angle) * (mobile ? 60 : 142) -
+          Math.cos(angle) * (mobile ? 205 : 168);
         const z = Math.sin(angle) * (mobile ? 145 : 230);
-        const active = mobile
-          ? selected === index ||
-            (focused === index && !focusReleased && card.matches(":focus-visible"))
-          : focused !== -1 && !focusReleased
-            ? focused === index
-            : hovered === index;
-        const yaw = -Math.cos(angle) * 24;
-        card.style.transform = mobile
-          ? `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,${z.toFixed(2)}px) rotateY(${yaw.toFixed(2)}deg) rotateX(${(-Math.sin(angle) * 8).toFixed(2)}deg) translate(-50%,-50%)`
-          : compact
-            ? `translate3d(${(Math.cos(angle) * 2).toFixed(2)}px,0,0) rotateY(${(Math.sin(angle) * 2).toFixed(2)}deg)`
-            : `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,${z.toFixed(2)}px) rotateY(${yaw.toFixed(2)}deg) rotateX(${(-Math.sin(angle) * 8).toFixed(2)}deg) translate(-50%,-50%)`;
-        // The original globe and its circular solid core sit between the two
-        // half-orbits. Outside its silhouette, the far cards remain visible.
-        card.style.zIndex = String(
-          (compact && !mobile) || active || (mobile && selected === index)
-            ? 4
-            : z < 0
-              ? 1
-              : 3,
-        );
-        if (mobile) card.dataset.selected = String(selected === index);
-        else delete card.dataset.selected;
+        const yaw = Math.cos(angle) * (mobile ? 50 : 40);
+        const pitch =
+          Math.cos(angle) * (mobile ? 38 : 25) - Math.sin(angle) * 8;
+        card.style.transform = `translate3d(${x.toFixed(3)}px,${y.toFixed(3)}px,${z.toFixed(3)}px) rotateY(${yaw.toFixed(3)}deg) rotateX(${pitch.toFixed(3)}deg) translate(-50%,-50%)`;
+        // All four objects share a CSS 3D context. The browser intersects their
+        // actual planes; no sign-based paint-order or visibility switch.
+        card.dataset.selected = String(selected === index);
         card.dataset.depth = z.toFixed(2);
         card.dataset.orbitSlot = String(slots[index]);
+        card.dataset.angle = angle.toFixed(6);
       });
       el!.dataset.phase = phase.toFixed(4);
       el!.dataset.speed = speed.toFixed(3);
     }
     function promote(index: number) {
-      if (index < 0 || (compact && !mobile)) return;
-      // Exchange actual orbital slots instead of creating a fourth, fixed pose.
-      // The outgoing card takes precisely the incoming card's former place.
-      if (foregroundSlot === null) {
-        foregroundSlot = slots.reduce((front, slot) =>
-          Math.sin(phase + (slot * Math.PI * 2) / 3) >
-          Math.sin(phase + (front * Math.PI * 2) / 3)
-            ? slot
-            : front,
-        );
-      }
-      const outgoing = slots.indexOf(foregroundSlot);
-      [slots[index], slots[outgoing]] = [slots[outgoing], slots[index]];
+      if (index < 0) return;
+      const desired = Math.PI / 2 - (slots[index] * Math.PI * 2) / 3;
+      const delta = Math.atan2(
+        Math.sin(desired - phase),
+        Math.cos(desired - phase),
+      );
+      // Rotate the entire constellation together, keeping 120° spacing even
+      // while a new selection comes forward. Never teleport individual cards.
+      alignment = { delta, elapsed: 0, applied: 0 };
     }
     function clearEntries() {
       entries.forEach((animation) => animation.cancel());
@@ -142,7 +127,7 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
             ],
             {
               duration: 620,
-              delay: 320 + index * 180,
+              delay: 200 + index * 180,
               easing: "cubic-bezier(0.23, 1, 0.32, 1)",
               fill: "backwards",
             },
@@ -174,15 +159,24 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
         (!focusReleased && (mobile ? keyboardFocus : focused !== -1)) ||
         selected !== -1;
       const target = stopped ? 0 : !mobile && hovered !== -1 ? 0.035 : 1;
-      if (!stopped) foregroundSlot = null;
       speed += (target - speed) * (1 - Math.exp(-dt / 320));
       if (!stopped)
         phase =
           (phase + (dt / (mobile ? 24000 : 36000)) * Math.PI * 2 * speed) %
           (Math.PI * 2);
       else speed = 0;
+      if (alignment) {
+        alignment.elapsed += dt;
+        const t = Math.min(1, alignment.elapsed / 900);
+        const eased = t * t * t * (10 + t * (-15 + t * 6));
+        const next = alignment.delta * eased;
+        phase =
+          (phase + next - alignment.applied + Math.PI * 2) % (Math.PI * 2);
+        alignment.applied = next;
+        if (t === 1) alignment = null;
+      }
       paint();
-      if (!stopped) schedule();
+      if (!stopped || alignment) schedule();
       else previous = 0;
     }
     function schedule() {
@@ -190,7 +184,10 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
         frame = requestAnimationFrame(render);
     }
     const visibility = observeViewportReplay(el, {
-      threshold: 0.08,
+      // The scene itself never translates: enter at its first visible pixels,
+      // without the inset needed by elements that animate their observed box.
+      threshold: 0.001,
+      rootMargin: "0px",
       onEnter() {
         visible = true;
         previous = 0;
@@ -198,6 +195,9 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
         schedule();
       },
       onExit() {
+        alignment = null;
+        clearTimeout(hoverTimer);
+        hovered = -1;
         clearTimeout(selectionTimer);
         selected = -1;
         focusReleased = true;
@@ -212,7 +212,6 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
     });
     const resize = new ResizeObserver(() => {
       width = el.clientWidth;
-      compact = innerWidth < 1000;
       mobile = innerWidth < 768;
       cardWidth = cards[0].offsetWidth;
       schedule();
@@ -221,16 +220,26 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
     const enter = (event: PointerEvent) => {
       if (event.pointerType !== "mouse") return;
       hovered = cards.indexOf(event.currentTarget as HTMLButtonElement);
+      clearTimeout(hoverTimer);
+      // A stationary pointer may remain over a moving card. Keep the approved
+      // hover slowdown brief so it cannot look like a permanently frozen orbit.
+      hoverTimer = window.setTimeout(() => {
+        hovered = -1;
+        schedule();
+      }, 1200);
       schedule();
     };
     const leave = () => {
       hovered = -1;
+      clearTimeout(hoverTimer);
       schedule();
     };
     const focus = (event: FocusEvent) => {
       focused = cards.indexOf(event.target as HTMLButtonElement);
       focusReleased = false;
       promote(focused);
+      clearTimeout(selectionTimer);
+      selectionTimer = window.setTimeout(resume, 5000);
       clearEntries();
       el.dataset.orbitEntry = "active";
       schedule();
@@ -247,14 +256,19 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
       }
       if (preference.matches) {
         selected = -1;
+        alignment = null;
+        focusReleased = true;
+        clearTimeout(selectionTimer);
         cards.forEach((card) => delete card.dataset.selected);
       }
       schedule();
     };
     const resume = () => {
       selected = -1;
+      alignment = null;
       focusReleased = true;
       hovered = -1;
+      clearTimeout(hoverTimer);
       clearTimeout(selectionTimer);
       schedule();
     };
@@ -293,6 +307,7 @@ export default function ServicesOrbit({ children }: { children: ReactNode }) {
     return () => {
       disposed = true;
       clearTimeout(selectionTimer);
+      clearTimeout(hoverTimer);
       cancelAnimationFrame(frame);
       clearEntries();
       visibility.dispose();

@@ -580,7 +580,15 @@ section {
 .hero-object {
   width: 100%;
   height: 100%;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
+}
+.hero-art,
+.hero-art * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y pinch-zoom;
 }
 .hero-object canvas {
   display: block;

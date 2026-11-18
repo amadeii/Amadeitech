@@ -1,6 +1,7 @@
 import { motionPreference } from "./motion";
 import { useEffect, useRef } from "react";
 import { HeroRenderer } from "./HeroRenderer";
+import { observeHeroPointer } from "./heroPointer";
 import * as THREE from "three";
 
 // An extruded interpretation of AT; the original brand asset remains in the header.
@@ -122,8 +123,9 @@ export default function HeroScene({ paused = false }: { paused?: boolean }) {
       y += (targetY - y) * 0.12;
       const enter = reduced.matches ? 1 : Math.min(1, (now - start) / 1500);
       const ease = 1 - Math.pow(1 - enter, 4);
-      group.rotation.y = -0.4 + x * 0.25 + (1 - ease) * 0.7;
-      group.rotation.x = -0.15 + y * 0.18;
+      group.rotation.y =
+        -0.4 + x * 0.25 + (1 - ease) * 0.7 + Math.sin(elapsed * 0.32) * 0.18;
+      group.rotation.x = -0.15 + y * 0.18 + Math.sin(elapsed * 0.27) * 0.06;
       group.position.y = -0.02 - (1 - ease) * 0.32;
       edge.position.x = 2 + x * 2;
       if (running) {
@@ -153,11 +155,16 @@ export default function HeroScene({ paused = false }: { paused?: boolean }) {
     });
     resize.observe(el);
     function move(e: PointerEvent) {
-      if (reduced.matches || motionPaused.current || e.pointerType === "touch")
-        return;
+      if (reduced.matches || motionPaused.current) return;
       const b = el!.getBoundingClientRect();
-      targetX = (e.clientX - b.left) / b.width - 0.5;
-      targetY = (e.clientY - b.top) / b.height - 0.5;
+      targetX = Math.max(
+        -0.5,
+        Math.min(0.5, (e.clientX - b.left) / b.width - 0.5),
+      );
+      targetY = Math.max(
+        -0.5,
+        Math.min(0.5, (e.clientY - b.top) / b.height - 0.5),
+      );
       schedule();
     }
     function leave() {
@@ -165,8 +172,11 @@ export default function HeroScene({ paused = false }: { paused?: boolean }) {
       targetY = 0;
       schedule();
     }
-    el.addEventListener("pointermove", move);
-    el.addEventListener("pointerleave", leave);
+    const unbindPointer = observeHeroPointer(
+      el.closest<HTMLElement>(".hero-art") || el,
+      move,
+      leave,
+    );
     const observer = new IntersectionObserver((entries) => {
       visible = entries[0].isIntersecting;
       if (visible) schedule();
@@ -184,8 +194,7 @@ export default function HeroScene({ paused = false }: { paused?: boolean }) {
       cancelAnimationFrame(frame);
       resize.disconnect();
       observer.disconnect();
-      el.removeEventListener("pointermove", move);
-      el.removeEventListener("pointerleave", leave);
+      unbindPointer();
       document.removeEventListener("visibilitychange", schedule);
       reduced.removeEventListener("change", schedule);
       geometries.forEach((g) => g.dispose());

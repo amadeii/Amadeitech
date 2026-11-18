@@ -43,7 +43,7 @@ try {for(const width of [1440,393]) {
   const phases=samples.filter(s=>s.entry==='active'&&s.phase).map(s=>s.phase);
   let travel=0;for(let i=1;i<phases.length;i++){const d=(phases[i]-phases[i-1]+2*Math.PI)%(2*Math.PI);assert.ok(d<.03,'no phase jump');travel+=d;}assert.ok(travel>.3,'orbit advances through entry');
   assert.deepEqual(errors,[]);
-  const cardState=()=>p.locator('.orbit-service').evaluateAll(es=>es.map(e=>({slot:e.dataset.orbitSlot,transform:e.style.transform,z:getComputedStyle(e).zIndex,selected:e.dataset.selected})));
+  const cardState=()=>p.locator('.orbit-service').evaluateAll(es=>es.map(e=>({slot:e.dataset.orbitSlot,angle:+e.dataset.angle,transform:e.style.transform,z:getComputedStyle(e).zIndex,selected:e.dataset.selected})));
   async function pick(index){
    if(width>=768){await p.locator('.orbit-service').nth(index).focus();}
    else{
@@ -57,11 +57,10 @@ try {for(const width of [1440,393]) {
   let next=-1;for(let i=0;i<3;i++)if(i!==first&&await pick(i)){next=i;break;}
   assert.ok(next>=0,'a second card can be selected');
   const afterSwap=await cardState();
-  assert.equal(afterSwap[first].slot,beforeSwap[next].slot,'outgoing takes incoming slot');
-  assert.equal(afterSwap[next].slot,beforeSwap[first].slot,'incoming takes foreground slot');
-  assert.equal(afterSwap[first].transform,beforeSwap[next].transform,'outgoing occupies incoming pose');
-  assert.equal(afterSwap.filter(c=>c.z==='4').length,1,'exactly one promoted card');
-  summary.swap={first,next,before:beforeSwap,after:afterSwap};
+  assert.deepEqual(afterSwap.map(c=>c.slot),beforeSwap.map(c=>c.slot),'selection never teleports individual slots');
+  afterSwap.forEach((c,i)=>assert.ok(Math.abs((afterSwap[(i+1)%3].angle-c.angle+2*Math.PI)%(2*Math.PI)-2*Math.PI/3)<.000003,'selection preserves 120 degree spacing'));
+  assert.ok(afterSwap.every(c=>c.z==='auto'),'native depth order remains intact during selection');
+  summary.alignment={first,next,before:beforeSwap,after:afterSwap};
   await p.screenshot({path:`${dir}/selected-${width}.png`});
   if(width>=768)await p.locator('.orbit-service').nth(next).evaluate(e=>e.blur());
   else await p.waitForTimeout(5200);

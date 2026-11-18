@@ -2,26 +2,56 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ComponentProps } from "react";
 import NetworkLines from "./effects/NetworkLines";
 import { effectLoop } from "./effectLoop";
+import { motionPreference } from "./motion";
+import { observeHeroPointer } from "./heroPointer";
 type Props = ComponentProps<typeof NetworkLines>;
 
 function CanvasNetwork({
   baseColor = "#406bc9",
   accentColor = "#a1caff",
   linkDistance = 160,
+  density = 138,
+  paused = false,
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const pausedRef = useRef(paused);
+  const resume = useRef<() => void>(() => {});
+  useEffect(() => {
+    pausedRef.current = paused;
+    resume.current();
+  }, [paused]);
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const nodes = Array.from({ length: 85 }, (_, i) => ({
-      x: ((i * 173 + 37) % 997) / 997,
-      y: ((i * 311 + 71) % 991) / 991,
-      vx: Math.sin(i * 2.3) * 0.018,
-      vy: Math.cos(i * 1.7) * 0.018,
-    }));
+    const nodes = Array.from(
+      { length: Math.max(10, Math.min(300, density)) },
+      (_, i) => ({
+        x: ((i * 173 + 37) % 997) / 997,
+        y: ((i * 311 + 71) % 991) / 991,
+        vx: Math.sin(i * 2.3) * 0.018,
+        vy: Math.cos(i * 1.7) * 0.018,
+      }),
+    );
     let last = 0;
+    const pointer = { x: -10000, y: -10000 };
+    const preference = motionPreference();
+    const unbindPointer = observeHeroPointer(
+      canvas.closest<HTMLElement>(".hero-art") || canvas,
+      (event) => {
+        if (preference.matches || pausedRef.current) return;
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+        pointer.x =
+          ((event.clientX - rect.left) * canvas.clientWidth) / rect.width;
+        pointer.y =
+          ((event.clientY - rect.top) * canvas.clientHeight) / rect.height;
+      },
+      () => {
+        pointer.x = pointer.y = -10000;
+      },
+    );
     const loop = effectLoop(
       canvas,
       (now, running) => {
@@ -44,6 +74,12 @@ function CanvasNetwork({
           n.y += n.vy * dt;
           if (n.x < 0 || n.x > 1) n.vx *= -1;
           if (n.y < 0 || n.y > 1) n.vy *= -1;
+          const dx = n.x * w - pointer.x,
+            dy = n.y * h - pointer.y;
+          if (dx * dx + dy * dy < 220 * 220) {
+            n.x -= (dx / w) * Math.min(1, dt * 0.3);
+            n.y -= (dy / h) * Math.min(1, dt * 0.3);
+          }
         }
         ctx.lineWidth = 0.7;
         ctx.strokeStyle = baseColor;
@@ -69,10 +105,15 @@ function CanvasNetwork({
         }
         ctx.globalAlpha = 1;
       },
-      () => false,
+      () => pausedRef.current,
     );
-    return () => loop.dispose();
-  }, [baseColor, accentColor, linkDistance]);
+    resume.current = loop.schedule;
+    return () => {
+      unbindPointer();
+      loop.dispose();
+      resume.current = () => {};
+    };
+  }, [baseColor, accentColor, linkDistance, density]);
   return (
     <canvas
       ref={ref}
