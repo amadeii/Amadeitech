@@ -10,6 +10,7 @@ import "./refinements.css";
 import "./orion-composition.css";
 import "./showcases.css";
 import "./mobile-showcases.css";
+import "./showcase-panels.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

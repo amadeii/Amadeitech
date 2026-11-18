@@ -1,0 +1,252 @@
+/* The approved site stays mounted and supplies a stable viewing area.
+   Administrative captures occupy a separate desktop frame, including on phones. */
+.showcase-view-switch {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  padding: 3px;
+  margin-bottom: 18px;
+  border: 1px solid #51607f;
+  border-radius: 6px;
+  background: #080d1b;
+}
+.showcase-view-switch button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #b6c6df;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+.showcase-view-switch button[aria-pressed="true"] {
+  background: #edf3ff;
+  color: #080d1b;
+}
+.showcase[data-has-panel="true"] .showcase-depth {
+  position: relative;
+}
+.showcase[data-has-panel="true"] .showcase-entrance,
+.showcase-panel-layer {
+  transition:
+    opacity 280ms ease,
+    visibility 280ms;
+}
+.showcase[data-view="panel"] .showcase-entrance,
+.showcase[data-view="site"] .showcase-panel-layer {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.showcase-panel-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+.showcase-panel-camera {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  padding: 6px;
+  border-radius: 12px;
+  background: #17243a;
+  box-shadow:
+    0 28px 65px #02061166,
+    0 6px 20px #02061155;
+}
+.story-beaute .showcase-panel-camera {
+  background: #292f3a;
+}
+.showcase-panel-camera .showcase-browser-bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 0 8px 4px;
+  min-height: 36px;
+}
+.showcase-panel-enlarge {
+  min-height: 44px;
+  border: 0;
+  padding: 4px 6px;
+  background: transparent;
+  color: #d6e4ff;
+  font: inherit;
+  cursor: pointer;
+}
+.showcase-panel-stage .showcase-screen {
+  inset: 0;
+  clip-path: none;
+  transform: translate3d(0, 8px, 0) scale(0.99);
+  transition:
+    opacity 260ms ease,
+    transform 360ms var(--ease-out);
+}
+.showcase-panel-stage .showcase-screen.is-active {
+  transform: none;
+}
+.showcase-panel-stage .showcase-screen > img {
+  object-fit: contain;
+}
+.showcase[data-view="panel"] .showcase-filmstrip img {
+  object-fit: contain;
+}
+.story-view-description {
+  display: grid;
+}
+.story-view-description > span {
+  grid-area: 1 / 1;
+  transition: opacity 220ms ease;
+}
+.story-view-description[data-panel="true"] > span:first-child,
+.story-view-description[data-panel="false"] > span:last-child {
+  opacity: 0;
+  visibility: hidden;
+}
+.showcase-panel-dialog {
+  width: min(1360px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  border: 1px solid #51607f;
+  border-radius: 12px;
+  background: #0d162c;
+  color: #f1f5ff;
+  overscroll-behavior: contain;
+}
+.showcase-panel-dialog::backdrop {
+  background: #020611dd;
+}
+html:has(.showcase-panel-dialog[open]) {
+  overflow: hidden;
+}
+.showcase-panel-dialog-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.showcase-panel-dialog-heading h4 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+}
+.showcase-panel-dialog-heading button {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #51607f;
+  border-radius: 3px;
+  background: #17243a;
+  color: #f1f5ff;
+  font: inherit;
+  cursor: pointer;
+}
+.showcase-panel-dialog-image {
+  max-height: 64dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 5px;
+  background: #080d1b;
+}
+.showcase-panel-dialog-image img {
+  display: block;
+  width: 100%;
+  min-width: 1000px;
+  height: auto;
+  max-width: none;
+}
+.showcase-panel-dialog > p {
+  margin: 16px 0 8px;
+  max-width: 80ch;
+  color: #c1cde3;
+}
+.showcase-panel-dialog small {
+  color: #aabbd4;
+}
+.showcase-view-switch button:focus-visible,
+.showcase-panel-enlarge:focus-visible,
+.showcase-panel-dialog :focus-visible {
+  outline: 2px solid #8fb1ff;
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .showcase-view-switch button[aria-pressed="false"]:hover,
+  .showcase-panel-enlarge:hover {
+    color: #ffffff;
+  }
+}
+@media (min-width: 768px) {
+  .showcase[data-has-panel="true"] .showcase-view-switch {
+    grid-row: 1;
+  }
+  .showcase[data-has-panel="true"] .showcase-depth {
+    grid-row: 2;
+  }
+  .showcase[data-has-panel="true"] .showcase-filmstrip {
+    grid-row: 3;
+  }
+  .showcase[data-has-panel="true"] .showcase-navigation {
+    grid-row: 4;
+  }
+  .showcase[data-has-panel="true"] .showcase-gesture-hint {
+    grid-row: 5;
+  }
+}
+@media (max-width: 767px) {
+  .showcase-view-switch {
+    margin-inline: auto;
+    margin-bottom: 22px;
+  }
+  .showcase[data-has-panel="true"] .showcase-depth {
+    width: 100%;
+    height: calc(min(86cqw, 320px) * 628 / 300);
+    transition: height 420ms var(--ease-out);
+  }
+  .showcase[data-has-panel="true"] {
+    container-type: inline-size;
+  }
+  .showcase[data-has-panel="true"] .showcase-entrance {
+    width: min(86%, 320px);
+    margin-inline: auto;
+  }
+  .showcase[data-view="panel"] .showcase-depth {
+    height: calc((100cqw - 10px) * 0.625 + 58px);
+  }
+  .showcase-panel-camera {
+    border-radius: 9px;
+    padding: 5px;
+  }
+  .showcase-panel-camera .showcase-browser-bar {
+    gap: 8px;
+    font-size: 12px;
+    padding-inline: 4px;
+  }
+  .showcase-panel-camera .showcase-screen-stage {
+    position: relative;
+    inset: auto;
+    aspect-ratio: 16 / 10;
+    border-radius: 5px;
+    background: #0a1426;
+  }
+  .showcase-panel-dialog {
+    padding: 14px;
+  }
+  .showcase-panel-dialog-heading h4 {
+    font-size: 20px;
+  }
+}
+html[data-motion="reduce"] .showcase-panel-layer,
+html[data-motion="reduce"] .showcase[data-has-panel="true"] .showcase-depth,
+html[data-motion="reduce"] .showcase[data-has-panel="true"] .showcase-entrance,
+html[data-motion="reduce"] .showcase-panel-stage .showcase-screen,
+html[data-motion="reduce"] .story-view-description > span {
+  transition: none;
+  transition-duration: 0s !important;
+  transform: none;
+}

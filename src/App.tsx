@@ -113,6 +113,7 @@ function ProjectFeature({
   project: Project;
   index: number;
 }) {
+  const [panelDescription, setPanelDescription] = useState<string | null>(null);
   const direction: TextDirection[] = [
     "energy",
     "balance",
@@ -141,9 +142,24 @@ function ProjectFeature({
         </h3>
         <p className="story-category">{project.category}</p>
       </div>
-      <ProjectShowcase project={project} />
+      <ProjectShowcase project={project} onPanelChange={setPanelDescription} />
       <div className="story-copy">
-        <p>{project.description}</p>
+        {project.panel ? (
+          <p
+            className="story-view-description"
+            data-panel={panelDescription !== null}
+            aria-live="polite"
+          >
+            <span aria-hidden={panelDescription !== null}>
+              {project.description}
+            </span>
+            <span aria-hidden={panelDescription === null}>
+              {panelDescription}
+            </span>
+          </p>
+        ) : (
+          <p>{project.description}</p>
+        )}
         <a
           className="text-link project-link"
           href={project.url}

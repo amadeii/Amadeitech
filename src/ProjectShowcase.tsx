@@ -8,9 +8,26 @@ import IPhoneHardware from "./IPhoneHardware";
 
 // Screens stay mounted: transitions retarget naturally even when a visitor
 // changes direction mid-reveal. Pointer motion never causes React renders.
-export default function ProjectShowcase({ project }: { project: Project }) {
-  const screens = showcaseScreens[project.id];
-  const [active, setActive] = useState(0);
+export default function ProjectShowcase({
+  project,
+  onPanelChange,
+}: {
+  project: Project;
+  onPanelChange?: (description: string | null) => void;
+}) {
+  const siteScreens = showcaseScreens[project.id];
+  const panelScreens =
+    project.panel?.modules.map((module) => ({
+      label: module.name,
+      desktop: module.image,
+      alt: `${module.name} — captura real do painel de ${project.name}`,
+      description: module.description,
+    })) ?? [];
+  const [view, setView] = useState<"site" | "panel">("site");
+  const [indices, setIndices] = useState({ site: 0, panel: 0 });
+  const active = indices[view];
+  const screens = view === "panel" ? panelScreens : siteScreens;
+  const enlarged = useRef<HTMLDialogElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const camera = useRef<HTMLDivElement>(null);
   const drag = useRef<{
@@ -158,8 +175,20 @@ export default function ProjectShowcase({ project }: { project: Project }) {
       root.current.dataset.direction =
         next > current.current ? "forward" : "backward";
     }
-    current.current = (next + screens.length) % screens.length;
-    setActive(current.current);
+    const index = (next + screens.length) % screens.length;
+    current.current = index;
+    setIndices((previous) => ({ ...previous, [view]: index }));
+    if (view === "panel")
+      onPanelChange?.(panelScreens[current.current].description);
+  };
+  const switchView = (next: "site" | "panel") => {
+    if (next === view) return;
+    release();
+    current.current = indices[next];
+    setView(next);
+    onPanelChange?.(
+      next === "panel" ? panelScreens[indices.panel].description : null,
+    );
   };
   const moveCamera = (transform: string) => {
     cancelAnimationFrame(frame.current);
@@ -230,13 +259,41 @@ export default function ProjectShowcase({ project }: { project: Project }) {
   return (
     <div
       className="showcase"
+      data-view={view}
+      data-has-panel={project.panel ? "true" : undefined}
       ref={root}
       role="region"
       aria-roledescription="galeria"
       aria-label={`Explore ${project.name}`}
     >
+      {project.panel && (
+        <div
+          className="showcase-view-switch"
+          role="group"
+          aria-label={`Visualização de ${project.name}`}
+        >
+          <button
+            type="button"
+            aria-pressed={view === "site"}
+            onClick={() => switchView("site")}
+          >
+            Site
+          </button>
+          <button
+            type="button"
+            aria-pressed={view === "panel"}
+            onClick={() => switchView("panel")}
+          >
+            Painel de Comando
+          </button>
+        </div>
+      )}
       <div className="showcase-depth">
-        <div className="showcase-entrance">
+        <div
+          className="showcase-entrance"
+          inert={view === "panel"}
+          aria-hidden={view === "panel"}
+        >
           <div className="showcase-camera" ref={camera}>
             <IPhoneHardware />
             <div className="showcase-browser-bar" aria-hidden="true">
@@ -271,11 +328,11 @@ export default function ProjectShowcase({ project }: { project: Project }) {
               onPointerCancel={release}
               onLostPointerCapture={release}
             >
-              {screens.map((screen, i) => (
+              {siteScreens.map((screen, i) => (
                 <picture
                   key={screen.desktop}
-                  className={`showcase-screen${active === i ? " is-active" : ""}`}
-                  aria-hidden={active !== i}
+                  className={`showcase-screen${indices.site === i ? " is-active" : ""}`}
+                  aria-hidden={indices.site !== i}
                 >
                   <source media="(max-width: 767px)" srcSet={screen.mobile} />
                   <img
@@ -293,6 +350,70 @@ export default function ProjectShowcase({ project }: { project: Project }) {
             </div>
           </div>
         </div>
+        {project.panel && (
+          <div
+            className="showcase-panel-layer"
+            inert={view !== "panel"}
+            aria-hidden={view !== "panel"}
+          >
+            <div className="showcase-panel-camera">
+              <div className="showcase-browser-bar">
+                <span className="showcase-window-marks" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span>{project.name} · Painel de Comando</span>
+                <button
+                  className="showcase-panel-enlarge"
+                  type="button"
+                  aria-label={`Ampliar painel de ${project.name}`}
+                  onClick={() => enlarged.current?.showModal()}
+                >
+                  Ampliar
+                </button>
+              </div>
+              <div
+                className="showcase-screen-stage showcase-panel-stage"
+                tabIndex={0}
+                role="group"
+                aria-label={`Painel de ${project.name}. Use as setas para explorar.`}
+                onKeyDown={keys}
+                onPointerMove={pointerMove}
+                onPointerDown={(e) => {
+                  if (e.isPrimary && e.button === 0)
+                    drag.current = {
+                      x: e.clientX,
+                      y: e.clientY,
+                      time: performance.now(),
+                      axis: null,
+                    };
+                }}
+                onPointerUp={pointerUp}
+                onPointerCancel={release}
+                onLostPointerCapture={release}
+              >
+                {panelScreens.map((screen, i) => (
+                  <picture
+                    key={screen.desktop}
+                    className={`showcase-screen${indices.panel === i ? " is-active" : ""}`}
+                    aria-hidden={indices.panel !== i}
+                  >
+                    <img
+                      src={screen.desktop}
+                      width="1280"
+                      height="800"
+                      loading="lazy"
+                      decoding="async"
+                      alt={screen.alt}
+                      draggable="false"
+                    />
+                  </picture>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="showcase-navigation">
         <div
@@ -369,6 +490,44 @@ export default function ProjectShowcase({ project }: { project: Project }) {
         <span className="hint-desktop">Arraste para mudar de perspectiva</span>
         <span className="hint-mobile">Deslize para explorar</span>
       </p>
+      {project.panel && (
+        <dialog
+          className="showcase-panel-dialog"
+          ref={enlarged}
+          aria-label={`Painel de Comando de ${project.name}`}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) enlarged.current?.close();
+          }}
+        >
+          <div className="showcase-panel-dialog-heading">
+            <h4>
+              {project.name} · {panelScreens[indices.panel].label}
+            </h4>
+            <button
+              type="button"
+              autoFocus
+              onClick={() => enlarged.current?.close()}
+            >
+              Fechar
+            </button>
+          </div>
+          <div
+            className="showcase-panel-dialog-image"
+            tabIndex={0}
+            role="region"
+            aria-label="Captura em tamanho legível; role para explorar"
+          >
+            <img
+              src={panelScreens[indices.panel].desktop}
+              width="1280"
+              height="800"
+              alt={panelScreens[indices.panel].alt}
+            />
+          </div>
+          <p>{panelScreens[indices.panel].description}</p>
+          <small>{project.panel.caption}</small>
+        </dialog>
+      )}
     </div>
   );
 }
